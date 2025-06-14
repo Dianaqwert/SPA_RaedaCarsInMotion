@@ -7,9 +7,9 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { toast } from 'ngx-sonner';
-import { AuthService } from '../../data-access/auth.service';
-import { isRequired, hasEmailError } from '../../utils/validators';
-import { GoogleButtonComponent } from '../../ui/google-button/google-button.component';
+import { AuthService } from '../../core/auth.service';
+//import { isRequired, hasEmailError } from '../../utils/validators';
+import { GoogleButtonComponent } from '../ui/google-button/google-button.component';
 
 export interface FormSignIn {
   email: FormControl<string | null>;
@@ -29,11 +29,11 @@ export default class SignInComponent {
   private _router = inject(Router);
 
   isRequired(field: 'email' | 'password') {
-    return isRequired(field, this.form);
+    //return isRequired(field, this.form);
   }
 
   hasEmailError() {
-    return hasEmailError(this.form);
+    //return hasEmailError(this.form);
   }
 
   form = this._formBuilder.group<FormSignIn>({
