@@ -31,12 +31,8 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [
-<<<<<<< HEAD
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
-=======
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
->>>>>>> bf1995c997c94836742235304106ed5e9450bcab
             ]
           },
           "configurations": {
