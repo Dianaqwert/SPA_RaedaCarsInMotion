@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-inicio',
-  imports: [],
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.css'
 })
 export class InicioComponent {
-
+  // Aquí puedes agregar la lógica del componente si es necesario
 }
