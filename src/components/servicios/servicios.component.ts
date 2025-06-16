@@ -1,11 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import Swal from 'sweetalert2';
+import { AuthStateService } from '../../app/features/auth/core/data-user/auth-state.service';
+import { Router } from '@angular/router';
+import { AsyncPipe } from '@angular/common'; // Si usaras el async pipe para otras cosas, mantenlo
+import { toast } from 'ngx-sonner';
+import Swal from 'sweetalert2'; // <--- ¡Importa SweetAlert2 aquí!
+import { SolicitudService } from '../../app/features/panel/data-solicitud/solicitudes.service';
+import { v4 as uuidv4 } from 'uuid'; // <--- ¡Importa la función para generar UUIDs!
 
 @Component({
   selector: 'app-servicios',
   imports: [FormsModule,ReactiveFormsModule,CommonModule],
+  providers: [SolicitudService],
   templateUrl: './servicios.component.html',
   styleUrl: './servicios.component.css'
 })
@@ -26,6 +33,10 @@ export class ServiciosComponent {
   fechaMax:string;
   //local
   ultimoRegistro: any = null;
+  idSol = input.required<string>();
+  private user = inject(AuthStateService);
+  private router = inject(Router);
+  private request = inject(SolicitudService);
 
   constructor(){
     //fecha minima que es la actual
@@ -270,12 +281,42 @@ export class ServiciosComponent {
   formSubmitted = false;
   formValidated = false;
 
-  onSubmit() {
+  async onSubmit() {
     this.formSubmitted = true;
+    if(!this.user.currentUserProfile()){
+      const result = await Swal.fire({
+        title: 'No hay ningún usuario logueado',
+        text: 'Para acceder a ciertas funcionalidades, necesitas iniciar sesión o crear una cuenta.',
+        icon: 'info',
+        showCancelButton: true, // Mostrar el botón de cerrar
+        showDenyButton: true,   // Mostrar el botón de crear cuenta
+        confirmButtonText: 'Iniciar Sesión',
+        denyButtonText: 'Crear Cuenta',
+        cancelButtonText: 'Cerrar',
+        reverseButtons: true, // Para que el orden de los botones sea más intuitivo
+        customClass: {
+          confirmButton: 'btn btn-primary me-2', // Estilos de Bootstrap (ajusta según tu CSS)
+          denyButton: 'btn btn-success me-2',
+          cancelButton: 'btn btn-secondary me-2'
+        },
+        buttonsStyling: false // Deshabilita el estilo por defecto de SweetAlert para usar clases de Bootstrap
+      });
+      if (result.isConfirmed) {
+        // Clic en "Iniciar Sesión"
+        this.router.navigateByUrl('sesion/sign-in');
+      } else if (result.isDenied) {
+        // Clic en "Crear Cuenta"
+        // Nota: asumo que "sesion/sign-out" fue un error y querías decir "sesion/sign-up"
+        this.router.navigateByUrl('sesion/sign-up');
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // Clic en "Cerrar" o fuera de la alerta
+        // No hacemos nada, simplemente se cierra la alerta.
+        console.log('Alerta de no logueado cerrada.');
+      }
+    }
     
     if(this.form.valid) {
       this.formValidated = true;
-      console.log('Validación exitosa');
     } else {
       this.form.markAllAsTouched();
       this.formValidated = false;
@@ -283,14 +324,14 @@ export class ServiciosComponent {
   }
 
   //guardar local
-  guardarInformacion(){
-    if (this.formValidated && this.form.valid) {
+  async guardarInformacion(){
+    
 
       // Obtener registros existentes o crear array nuevo
-      const registros: any[] = JSON.parse(localStorage.getItem('registroFormulario') || '[]');
       //registros -> objeto
-      const nuevoReg={
-        id: new Date().getTime(),
+      
+      const nuevoReg = {
+        id: uuidv4(), // <--- ¡Genera el ID único aquí con uuidv4()!
         fechaDeRegistro:new Date().toISOString(),
         nombre:this.form.value.nombre,
         apellidos:this.form.value.apellidos,
@@ -305,21 +346,12 @@ export class ServiciosComponent {
         urgencia:this.form.value.urgencia,
       }
 
-      //agregar el array
-      registros.push(nuevoReg);
-      //guardar en el local
-      localStorage.setItem('registroFormulario',JSON.stringify(registros));
-
-      // Guardar el último registro para mostrarlo
-      this.ultimoRegistro = nuevoReg;
 
       //reset formulario
       this.form.reset();
       this.formSubmitted=false;
       this.formValidated=false;
-
-      console.log('datos guardados',nuevoReg);
-
+      
       //alert
       Swal.fire({
         title: '¿Estás seguro?',
@@ -328,16 +360,19 @@ export class ServiciosComponent {
         showCancelButton: true,
         confirmButtonText: 'Sí, mandar información',
         cancelButtonText: 'Cancelar'
-        }).then((result) => {
+        }).then(async (result) => {
           if (result.isConfirmed) {
             // Acción si confirma
-            Swal.fire('Capturando', 'Tu información ha sido guardada.', 'success');
+            try{
+              await this.request.createSolicitud(nuevoReg);
+              this.form.reset(); // Limpia el formulario después de un envío exitoso
+            } catch {
+                Swal.fire('Capturando', 'Tu información ha sido guardada.', 'success');
+            }
+          }else{
+            Swal.fire('Error, información no guardada');
           }
       } );
-
-      
-    
-    }
   }
 
   getRegistros(): any[] {
@@ -345,4 +380,6 @@ export class ServiciosComponent {
     return datos ? JSON.parse(datos) : [];
   }
 
+
 }
+
