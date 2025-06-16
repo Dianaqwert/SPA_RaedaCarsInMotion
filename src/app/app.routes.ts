@@ -8,10 +8,26 @@ import { DetalleAutoComponent } from '../components/detalle-auto/detalle-auto.co
 
 export const routes: Routes = [
   {
+    path: 'sesion',
+    loadChildren: () => import('./features/auth/auth.routes'),
+  },
+  {
+    path: 'inicio',
+    component: InicioComponent
+  },
+  {
     path:'sesion',
-    loadChildren: () => import('./features/auth/auth.routes'), // Usa m.routes (no m.authRoutes)
+    loadChildren: () => import('./features/auth/auth.routes'),
   },
 
+  {
+    path: 'admin/panel',
+    loadComponent: () => import('./features/panel/admin/admin.component'),
+  },
+  {
+    path: 'solicitudes',
+    loadComponent: () => import('./features/panel/solicitudes/solicitudes.component'),
+  },
   {
     path:'sesion',
     loadChildren: () => import('./features/auth/auth.routes'), // Usa m.routes (no m.authRoutes)
@@ -23,5 +39,8 @@ export const routes: Routes = [
    {path:'catalogo',component:CatalogoComponent},
    //ruta que pasa parametros
    {path:'detalles/:id',component:DetalleAutoComponent},
-
+{
+    path: '**',
+    redirectTo: 'inicio'
+  }
 ];

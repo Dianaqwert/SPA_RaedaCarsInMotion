@@ -4,16 +4,24 @@ import {
   FormControl,
   ReactiveFormsModule,
   Validators,
+  
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { toast } from 'ngx-sonner';
 import { AuthService } from '../../core/auth.service';
 import { isRequired, hasEmailError } from '../../core/utils/validators';
 import { GoogleButtonComponent } from '../ui/google-button/google-button.component';
+import { AuthStateService } from '../../../auth/core/data-user/auth-state.service'; // Asegúrate de la ruta correcta
 
 export interface FormSignIn {
   email: FormControl<string | null>;
   password: FormControl<string | null>;
+}
+
+
+export interface Userr {
+  email: string;
+  password: string;
 }
 
 @Component({
@@ -25,7 +33,7 @@ export interface FormSignIn {
 })
 export default class SignInComponent {
   private _formBuilder = inject(FormBuilder);
-  private _authService = inject(AuthService);
+  private _authService = inject(AuthStateService); // Inyectas el servicio
   private _router = inject(Router);
 
   isRequired(field: 'email' | 'password') {

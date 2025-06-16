@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
-  GoogleAuthProvider,
+  GoogleAuthProvider, 
 } from '@angular/fire/auth';
 
 export interface User {
