@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { InicioComponent } from '../components/inicio/inicio.component';
 import { EquipoComponent } from '../components/equipo/equipo/equipo.component';
-import { ServiciosComponent } from '../components/servicios/servicios/servicios.component';
+import { ServiciosComponent } from '../components/servicios/servicios.component';
 import { FinanciamientoComponent } from '../components/financiamiento/financiamiento/financiamiento.component';
 import { CatalogoComponent } from '../components/catalogo/catalogo/catalogo.component';
 import { DetalleAutoComponent } from '../components/detalle-auto/detalle-auto.component';
