@@ -135,17 +135,21 @@
 /*MC con areas*/
 @media screen and (max-width: 768px) {
     .contenedor {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
         grid-template-areas: 
-            "header header header"
-            "contenido contenido contenido"
-            "sidebar sidebar sidebar"
-            "widget-1 widget-2 widget-2"
-            "widget-3 widget-4 widget-4";
+            "header"
+            "contenido"
+            "sidebar"
+            "widget-1"
+            "widget-2"
+            "widget-3"
+            "widget-4";
     }
 
     .contenedor .sidebar {
-        flex-direction: row; /* horizontal en pantallas pequeñas */
-        flex-wrap: wrap; /* permite que bajen si no caben */
+        flex-direction: row;
+        flex-wrap: wrap;
         justify-content: center;
     }
 }
@@ -171,4 +175,26 @@
     padding-top: 50px;
     padding-bottom: 0px;
     
+}
+
+/*Lectura de accesibilidad web*/
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.webAv{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+
 }

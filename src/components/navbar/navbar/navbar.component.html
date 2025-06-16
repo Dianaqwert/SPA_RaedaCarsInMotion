@@ -21,6 +21,7 @@
           <a class="nav-link" [routerLink]="['/servicios']">Servicios</a>
           <a class="nav-link" [routerLink]="['/financiamiento']">Financiamiento</a>
           <a class="nav-link" [routerLink]="['/equipo']">Equipo</a>
+
         @if(authState.currentUserProfile(); as profile) {
           <a class="btn btn-orange">Saludos! {{ profile.username }}</a>
           <!-- Lógica condicional para Admin vs. Solicitudes -->
@@ -35,6 +36,9 @@
           <a class="btn btn-orange" [routerLink]="['sesion/sign-in']">Iniciar Sesión</a>
           <a class="btn btn-orange" [routerLink]="['sesion/sign-up']">Crear Cuenta</a>
         }
+        <a class="nav-link" style="font-size: 2.5rem;">
+            <i class="bi bi-person-wheelchair"></i>
+        </a>
       </div>
     </div>
   </div>

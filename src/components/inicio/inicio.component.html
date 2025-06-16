@@ -1,135 +1,169 @@
-
+<!-- <header>, <main>, <nav>, <footer> -->
 <!--C1-->
-<section class="py-5 text-center container">
-  <div class="row py-lg-5">
-    <div class="col-lg-6 col-md-8 mx-auto">
-      <h1 class="fw-light" style="font-family: DM Sans, sans-serif;font-weight: bolder;">Conduciendo tu futuro, hoy</h1>
-      <img src="Raeda-p-removebg-preview.png" alt="Raeda cars" class="img-fluid">
-      <p class="lead text-body-secondary" style="font-family: DM Sans, sans-serif;">Encuentra el vehículo perfecto para tu estilo de vida.<br><strong style="color:black">Calidad, confianza y el mejor servicio </strong>, siempre a tu alcance.</p>
-    </div> 
-  </div> 
-</section>
-
-<!--Carruser C2-->
-<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+<div #contenidoPagina>
+  <header>
+    <p class="sr-only">Has activado el modo de lectura para accesibilidad web. A continuación, se presentan los botones correspondientes.</p>
+    <div class="webAv">
+      <button class="btn btn-lg fw-bold btn-1"  (click)="leerPaginaCompleta('es')">🔊 Leer en español</button>
+      <button class="btn btn-lg fw-bold btn-1"  (click)="pausarLectura()">⏸️</button>
+      <button  class="btn btn-lg fw-bold btn-1" (click)="detenerLectura()">⏹️</button>
     </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="Avanza-1.webp" class="d-block w-100" alt="Carro avanza">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Camioneta Avanza</h5>
-          <p>Potencia, comodidad y espacio para toda la aventura. Tu próxima camioneta te espera.<br><strong>¡Descúbrela hoy</strong></p>
+  </header>
+
+  <main>
+    <p class="sr-only">Presentación de la agencia de autos Raeda Cars</p>
+    <section class="py-5 text-center container">
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="fw-light" style="font-family: DM Sans, sans-serif; font-weight: bolder;">Conduciendo tu futuro, hoy</h1>
+          <img src="Raeda-p-removebg-preview.png" alt="Logo de Raeda Cars" class="logo de Raeda Cars">
+          <p class="lead text-body-secondary" style="font-family: DM Sans, sans-serif;">
+            Encuentra el vehículo perfecto para tu estilo de vida.<br>
+            <strong style="color:black">Calidad, confianza y el mejor servicio</strong>, siempre a tu alcance.
+          </p>
         </div>
       </div>
-      <div class="carousel-item">
-        <img src="A3-1.webp" class="d-block w-100" alt="Carro A3 ">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Carro A3</h5>
-          <p>Diseño elegante, tecnología avanzada y rendimiento excepcional. Este sedán lo tiene todo.<br><strong>¡Hazlo tuyo ahora!</strong></p>
+    </section>
+    <p class="sr-only">Termina la presentación</p>
+    <!--Carrusel C2-->
+    <section>
+      <p class="sr-only">Comienza la sección de información con un carrusel de imágenes con distintos autos del catálogo, cada uno con una breve descripción</p>
+      <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Diapositiva 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="Avanza-1.webp" class="d-block w-100" alt="Camioneta Avanza">
+            <div class="carousel-caption d-none d-md-block">
+              <p class="sr-only">Auto número uno</p>
+              <h5>Camioneta Avanza</h5>
+              <p>Potencia, comodidad y espacio para toda la aventura. Tu próxima camioneta te espera.<br><strong>¡Descúbrela hoy!</strong></p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="A3-1.webp" class="d-block w-100" alt="Sedán A3">
+            <div class="carousel-caption d-none d-md-block">
+              <p class="sr-only">Auto número dos</p>
+              <h5>Carro A3</h5>
+              <p>Diseño elegante, tecnología avanzada y rendimiento excepcional. Este sedán lo tiene todo.<br><strong>¡Hazlo tuyo ahora!</strong></p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="Sedona-1.JPG" class="d-block w-100" alt="Deportivo Sedona">
+            <div class="carousel-caption d-none d-md-block">
+              <p class="sr-only">Auto número tres</p>
+              <h5>Carro Sedona</h5>
+              <p>Velocidad, estilo y adrenalina en cada curva. Vive la emoción al volante de este increíble deportivo.<br><strong>¡Pruébalo y enamórate!</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <p class="sr-only">Botones de navegación del carrusel de los cuales puede hacer uso para escuhar sobre la descripción de los coches que se pomocionan</p>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+    </section>
+
+    <!--CSS GRID - C3-->
+    <section>
+      <p class="sr-only">Sección con información sobre compras, promociones y servicios</p>
+      <div class="contenedor">
+        <div class="header">
+          <h1 class="text">Tu mejor elección en movilidad y servicio</h1>
+          <p class="fs-5 col-md-8">En nuestra agencia no solo te ofrecemos los mejores vehículos, sino también una experiencia diseñada para facilitar tu vida.<br>Desde la <strong style="color: #FCE07F;">compra hasta el mantenimiento</strong>, estamos contigo en cada paso.</p>
+          <p class="sr-only">Botón que dirige al catálogo de autos</p>
+          <div class="mb-5">
+            <a [routerLink]="['/catalogo']" class="btn btn-1 btn-lg px-4">Ver catálogo</a>
+          </div>
+          <hr class="col-3 col-md-2 mb-5">
+        </div>
+
+        <div class="contenido">
+          <h2 class="text-body-emphasis">Al adquirir tu auto</h2>
+          <p>En Raeda Cars ofrecemos un servicio postventa integral que incluye <strong>mantenimiento preventivo, cambio de aceite, inspección de frenos, revisión de sistemas eléctricos y reparaciones especializadas</strong>.<br>Con nuestro equipo de expertos, tu vehículo siempre estará en óptimas condiciones.</p>
+        </div>
+
+        <!--Barra lateral-->
+        <aside class="sidebar">
+          <h3 style="padding-bottom: 10px;">Promociones vigentes</h3>
+
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header">
+              <h4 class="my-0 fw-normal">Financiamiento</h4>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title pricing-card-title">12 meses sin intereses<small class="text-body-secondary fw-light"></small></h3>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>Compra tu auto hoy y págalo cómodamente sin intereses durante el primer año.<br>¡Tu próxima aventura comienza ahora!</li>
+              </ul>
+              <button [routerLink]="['/financiamiento']" type="button" class="w-100 btn btn-1 btn-lg">Solicitar</button>
+              <p class="sr-only">Botón que dirige a la solicitud de financiamiento</p>
+            </div>
+          </div>
+
+          <div class="card rounded-3 shadow-sm">
+            <div class="card-header">
+              <h4 class="my-0 fw-normal">Descuento</h4>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title pricing-card-title">Descuento especial por pago de contado<small class="text-body-secondary fw-light"></small></h3>
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>¿Listo para estrenar?</li>
+                <li>Si pagas en efectivo, obtén un 10% de descuento sobre el precio final.</li>
+              </ul>
+              <button [routerLink]="['/financiamiento']" type="button" class="w-100 btn btn-1 btn-lg">Solicitar</button>
+              <p class="sr-only">Botón que dirige a la solicitud de financiamiento</p>
+            </div>
+          </div>
+        </aside>
+
+        <p class="sr-only">Sección con información de los diferentes servicios que proveen</p>
+        <div class="widget-1">
+          <h3>Asesoramiento</h3>
+          <p>Te brindamos información detallada sobre características, especificaciones y modelos disponibles, para que tomes la mejor decisión según tus necesidades y presupuesto.</p>
+        </div>
+
+        <div class="widget-2">
+          <h3>Gestión de entrega</h3>
+          <p>Tu vehículo estará listo para usarse con limpieza detallada y una explicación completa de su funcionamiento.<br>Calidad y servicio en cada entrega.</p>
+        </div>
+
+        <div class="widget-3">
+          <h3>Repuestos y accesorios</h3>
+          <p>Desde llantas hasta sistemas de audio, en Raeda Cars encontrarás todo lo necesario para personalizar y mejorar tu experiencia de conducción.</p>
+        </div>
+
+        <div class="widget-4">
+          <h3>Garantías y seguros</h3>
+          <p>La garantía <strong>cubre reparaciones y defectos de fábrica</strong>, mientras que los seguros te protegen ante <strong>accidentes o daños inesperados</strong>.<br>En Raeda Cars queremos que conduzcas con seguridad y confianza.</p>
         </div>
       </div>
-      <div class="carousel-item">
-        <img src="Sedona-1.JPG" class="d-block w-100" alt="Carro Sedona">
-        <div class="carousel-caption d-none d-md-block">
-          <h5>Carro Sedona</h5>
-          <p>Velocidad, estilo y adrenalina en cada curva. Vive la emoción al volante de este increíble deportivo.<br><strong>¡Pruébalo y enamórate!</strong></p>
-        </div>
+    </section>
+  </main>
+
+  <p class="sr-only">Termina la sección informativa y comienza una introducción a seguir descubriendo los servicios que ofrece Raeda Cars</p>
+  <footer>
+    <div class="footer">
+      <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+        <main class="px-3">
+          <h1>¡Descubre todo lo que tenemos para ti en Raeda Cars!</h1>
+          <p class="lead"><br>Explora nuestros servicios y encuentra la mejor opción para ti.<br>Sigue navegando y descubre cómo podemos ayudarte a dar el siguiente paso hacia tu auto ideal.</p>
+          <p class="lead">
+            <a [routerLink]="['/servicios']" class="btn btn-lg fw-bold btn-1">Ver servicios</a>
+          </p>
+          <p class="sr-only">Botón que dirige al catálogo de servicios disponibles en Raeda Cars</p>
+        </main>
       </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
+  </footer>
+  <p class="sr-only">Termino la página de inicio , muchas gracias por escuchar sobre Reda cars , hasta pronto !</p>
 </div>
-
-<!--CSS GRID - C3-->
-<div class="contenedor">
-  <div class="header">
-    <h1 class="text">Tu mejor elección en movilidad y servicio</h1> 
-    <p class="fs-5 col-md-8">En nuestra agencia, no solo te ofrecemos los mejores vehículos, sino toda una experiencia diseñada para facilitar tu vida.<br>Desde la <strong style="color: #FCE07F;">compra hasta el mantenimiento, estamos contigo en cada paso.</strong></p> 
-    <div class="mb-5"> 
-      <!--a [routerLink]="['/catalogo']" class="btn btn-1 btn-lg px-4">Ver catálogo</a--> 
-    </div>
-    <hr class="col-3 col-md-2 mb-5"> 
-  </div>
-
-  <div class="contenido">
-    <h2 class="text-body-emphasis">En la compra de tu coche </h2>
-    <p>En Raeda Cars ofrecemos servicio postventa integral, que incluye <strong>mantenimiento preventivo, cambios de aceite, inspección de frenos, revisión de sistemas eléctricos y reparaciones especializadas</strong>.<br> Con nuestro equipo de expertos, tu vehículo estará siempre en óptimas condiciones.</p>
-  </div>
-
-  <!--side bar-->
-  <aside class="sidebar">
-
-			<h3 style="padding-bottom: 10px;">Promociones vigentes</h3>
-      <div class="card mb-4 rounded-3 shadow-sm">
-        <div class="card-header">
-          <h4 class="my-0 fw-normal">Financiamiento</h4>
-        </div> <div class="card-body">
-          <h3 class="card-title pricing-card-title">Financiación sin intereses por los primeros 12 meses<small class="text-body-secondary fw-light"></small></h3>
-          <ul class="list-unstyled mt-3 mb-4">
-            <li>Compra tu auto hoy y págalo cómodamente sin intereses durante el primer año.<br>¡Tu próxima aventura comienza ahora!</li>
-          </ul>
-          <!--button [routerLink]="['/financiamiento']" type="button" class="w-100 btn btn-1 btn-lg">Solicitar</button--> 
-        </div>
-      </div>
-
-      <div class="card rounded-3 shadow-sm">
-        <div class="card-header">
-          <h4 class="my-0 fw-normal">Descuento</h4>
-        </div> <div class="card-body">
-          <h3 class="card-title pricing-card-title">Descuento especial por pago de contado<small class="text-body-secondary fw-light"></small></h3>
-          <ul class="list-unstyled mt-3 mb-4">
-            <li>¿Listo para estrenar?</li>
-            <li>Si compras tu coche con pago en efectivo, te ofrecemos un 10% de descuento sobre el precio final.</li>
-          </ul>
-          <!--button [routerLink]="['/financiamiento']" type="button" class="w-100 btn btn-1 btn-lg">Solicitar</button--> 
-        </div>
-      </div>
-
-      
-
-	</aside>
-		
-
-  <div class="widget-1">
-		<h3>Asesoramiento</h3>
-    <p>Te ofrecemos información detallada sobre características, especificaciones y modelos disponibles, asegurándonos de que tomes la mejor elección según tus necesidades y presupuesto.</p>
-	</div>
-
-  <div class="widget-2">
-    <h3>Gestión de entrega</h3>
-    <p>Nos aseguramos de que esté listo para su uso con una limpieza detallada y una explicación completa de su funcionamiento.<br>La calidad y el servicio van de la mano con cada entrega.</p>
-  </div>
-
-  <div class="widget-3">
-		<h3>Repuestos y accesorios</h3>
-    <p>Desde llantas hasta sistemas de audio, en Raeda Cars tienes todo lo necesario para personalizar y mejorar tu experiencia de conducción.</p>
-	</div>
-
-  <div class="widget-4">
-		<h3>Garantías y seguros</h3>
-    <p>La garantía cubre <strong>cubre reparaciones y defectos de fábrica</strong> , mientras que los seguros te ofrecen tranquilidad ante <strong>, accidentes o daños inesperados.</strong><br>En Raeda Cars, queremos que conduzcas con seguridad y confianza</p>
-	</div>
-</div>
-
-<div class="footer">
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-      <main class="px-3">
-        <h1>¡Descubre todo lo que tenemos para ti en Raeda Car!</h1> 
-        <p class="lead"><br>Explora nuestros servicios y encuentra la mejor opción para ti. <br>Sigue navegando y descubre cómo podemos ayudarte a dar el siguiente paso hacia tu auto ideal</p> 
-        <p class="lead"> 
-          <a class="btn btn-lg fw-bold btn-1">Ver servicios</a> 
-        </p> 
-      </main> 
-     </div>
-</div>
-		
