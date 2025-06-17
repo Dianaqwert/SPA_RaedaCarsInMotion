@@ -17,10 +17,10 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav mx-auto">
         <a class="nav-link" [routerLink]="['/inicio']">Inicio</a>
-          <a class="nav-link" [routerLink]="['/catalogo']">Catálogo</a>
-          <a class="nav-link" [routerLink]="['/servicios']">Servicios</a>
-          <a class="nav-link" [routerLink]="['/financiamiento']">Financiamiento</a>
-          <a class="nav-link" [routerLink]="['/equipo']">Equipo</a>
+        <a class="nav-link" [routerLink]="['/catalogo']">Catálogo</a>
+        <a class="nav-link" [routerLink]="['/servicios']">Servicios</a>
+        <a class="nav-link" [routerLink]="['/financiamiento']">Financiamiento</a>
+        <a class="nav-link" [routerLink]="['/equipo']">Equipo</a>
 
         @if(authState.currentUserProfile(); as profile) {
           <a class="btn btn-orange">Saludos! {{ profile.username }}</a>
@@ -36,10 +36,53 @@
           <a class="btn btn-orange" [routerLink]="['sesion/sign-in']">Iniciar Sesión</a>
           <a class="btn btn-orange" [routerLink]="['sesion/sign-up']">Crear Cuenta</a>
         }
-        <a class="nav-link" style="font-size: 2.5rem;">
+
+        <!--Accesibilidad web-->
+        @if(routerAcc.url==='/inicio'){
+          <a class="nav-link" style="font-size: 2.5rem;" (click)="mostrarAccWeb()">
             <i class="bi bi-person-wheelchair"></i>
-        </a>
+          </a>
+        }
+        
       </div>
     </div>
   </div>
 </nav>
+
+@if(sideBar===true){
+      <aside class="my-sidebar" >
+        <button class="close-btn" (click)="mostrarAccWeb()">x</button>
+        <h4 style="padding-top: 25px;">Accecsibilidad Web</h4>
+        <nav>
+          <ul class="accesibilidad-list list-unstyled d-flex flex-column gap-3">
+            <!-- Idioma y controles -->
+            <p>Controles de lectura</p>
+
+            <li class="accesibilidad-item d-flex align-items-center gap-2 flex-wrap">
+              <button class="btn btn-accesible" aria-label="Leer en español"  (click)="leerPaginaCompleta('es')">📖 Leer</button>
+              <button class="btn btn-accesible" aria-label="Pausar lectura"   (click)="pausarLectura()">⏸️</button>
+              <button class="btn btn-accesible" aria-label="Detener lectura"  (click)="reanudarLectura()">▶️</button>
+              <button class="btn btn-accesible" aria-label="Detener lectura"  (click)="detenerLectura()">⏹️</button>
+            </li>
+            <hr>
+            <p>Tamaño de fuente</p>
+            <!-- Tamaño de fuente -->
+            <li class="accesibilidad-item d-flex align-items-center gap-2 flex-wrap">
+              
+              <button class="btn btn-accesible" aria-label="Fuente">Fuente</button>
+              <button class="btn btn-accesible" aria-label="Aumentar fuente">+</button>
+              <button class="btn btn-accesible" aria-label="Disminuir fuente">−</button>
+            </li>
+
+            <hr>
+            <p>Contraste de color</p>
+            <!-- Contraste -->
+            <li class="accesibilidad-item d-flex align-items-center gap-2 flex-wrap">
+              
+              <button class="btn btn-accesible" aria-label="Modo contraste amarillo">Con contraste</button>
+              <button class="btn btn-accesible" aria-label="Modo contraste oscuro">Sin contraste</button>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+    }

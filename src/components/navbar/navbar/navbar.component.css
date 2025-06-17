@@ -1,5 +1,9 @@
-div{
+
+*{
     font-family: "DM Sans", sans-serif;
+}
+
+div{
     font-size: 1rem;
     align-items: center;
 }
@@ -170,4 +174,66 @@ a{
     .btn-orange {
         margin-top: 1rem;
     }
+}
+
+/*Accesibilidad web*/
+.my-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  padding: 1rem;
+  z-index: 1050;
+  align-items: baseline;
+  display: flexbox;
+}
+
+.my-sidebar .close-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+}
+
+
+.AccWrb{
+    display: flex;
+}
+
+.btn-accesible {
+  padding: 0.5rem 1rem;
+  background-color: #cee0f2;
+  color: #212529;
+  border: 2px solid #212529;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-accesible:hover,
+.btn-accesible:focus {
+  background-color: #212529;
+  color: #fff;
+  outline: none;
+}
+
+.accesibilidad-list {
+  padding-left: 0;
+}
+
+.accesibilidad-item {
+  flex-wrap: wrap;
+}
+
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }

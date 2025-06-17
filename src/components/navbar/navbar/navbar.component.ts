@@ -9,17 +9,96 @@ import { AsyncPipe } from '@angular/common'; // Si usaras el async pipe para otr
 import { AuthStateService } from '../../../app/features/auth/core/data-user/auth-state.service';
 import { toast } from 'ngx-sonner'; // Asegúrate de que ngx-sonner esté instalado y configurado
 
-
+import { CommonModule } from '@angular/common';
+import { ViewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   // Asegúrate de que RouterModule esté aquí, y AsyncPipe si lo usas en el HTML
-  imports: [RouterModule, AsyncPipe], // Agregué AsyncPipe de nuevo por si se eliminó en algún momento
+  imports: [RouterModule, AsyncPipe,CommonModule], // Agregué AsyncPipe de nuevo por si se eliminó en algún momento
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
+
+  @ViewChild( 'contenidoPagina',{static:true})
+  
+  contenidoPagina!:ElementRef;
+  speech = new SpeechSynthesisUtterance();
+  voces: SpeechSynthesisVoice[] = [];
+  vozSabina?: SpeechSynthesisVoice;
+
+  ngOnInit(): void {
+    // Cargar las voces disponibles
+    window.speechSynthesis.onvoiceschanged = () => {
+      this.voces = window.speechSynthesis.getVoices();
+
+      console.log('Voces disponibles:');
+      this.voces.forEach((voz, i) => {
+        console.log(`${i + 1}: "${voz.name}" - ${voz.lang}`);
+      });
+
+    };
+  }
+
+  /* Entorno de accesibilidad */
+  public routerAcc;
+  constructor(routerAcc: Router) {
+    this.routerAcc = routerAcc;
+  }
+
+  /*sidebar*/
+
+  sideBar = false;
+
+  mostrarAccWeb(): void {
+    this.sideBar = !this.sideBar;
+  }
+
+  leerPaginaCompleta(idioma: 'es') {
+    //configuaraciones de lectura:
+    const contenido = document.getElementById('contenidoPagina');
+    const texto = contenido?.innerText || '';
+    
+    this.speech.text = texto;
+    this.speech.rate = 1;
+    const vozMexicana = this.voces.find(v => v.lang === 'es-MX');
+
+    if (vozMexicana) {
+      this.speech.lang = 'es-MX';
+      this.speech.voice = vozMexicana;
+      console.log('Usando voz mexicana:', vozMexicana.name);
+    } else {
+      // Fallback a cualquier voz en español si no hay de México
+      const vozEspanol = this.voces.find(v => v.lang === 'es-ES');
+      this.speech.lang = vozEspanol?.lang || 'es-ES';
+      this.speech.voice = vozEspanol || null;
+      console.warn('Voz mexicana no disponible. Usando otra voz en español:', vozEspanol?.name);
+    }
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(this.speech);
+  }
+
+
+  reanudarLectura() {
+    window.speechSynthesis.resume();
+  }
+
+  pausarLectura() {
+    window.speechSynthesis.pause();
+  }
+
+  detenerLectura() {
+    window.speechSynthesis.cancel();
+  }
+
+
+
+
+  /*----FIREBASE----*/
   // ¡Aquí es donde inyectamos el servicio y lo hacemos PÚBLICO!
   // 'public' es crucial para que la plantilla (HTML) pueda acceder a él.
   public authState = inject(AuthStateService);
@@ -36,4 +115,8 @@ export class NavbarComponent {
     this.authState.cerrarSesion(); // El servicio maneja la lógica de Firebase y la redirección
     toast.success('Sesión Cerrada'); // Muestra una notificación toast
   }
+
+
+
+
 }
