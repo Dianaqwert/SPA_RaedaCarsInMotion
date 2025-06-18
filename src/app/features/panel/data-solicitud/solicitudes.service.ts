@@ -7,11 +7,12 @@ import {
   collectionData,
   doc,
   getDoc,
-  updateDoc,
   query,
   where,
   CollectionReference,
   DocumentReference,
+  updateDoc,
+  deleteDoc
 } from '@angular/fire/firestore';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AuthStateService } from '../../auth/core/data-user/auth-state.service';
@@ -134,4 +135,47 @@ export class SolicitudService {
     const collectionQuery = query(this._collectionRefCredito);
     return collectionData(collectionQuery, { idField: 'id' }) as Observable<SolicitudCredito[]>;
   }
+
+  updateSolicitudServicio(id: string, data: Partial<SolicitudServicio>): Promise<void> {
+    const docRef = doc(this._firestore, this._nombreColeccionServicio, id);
+    toast.promise(updateDoc(docRef, data), {
+      loading: 'Guardando cambios...',
+      success: 'Solicitud actualizada con éxito.',
+      error: 'Error al actualizar la solicitud.'
+    });
+    return updateDoc(docRef, data);
+  }
+/**
+   * Elimina un documento de solicitud de servicio.
+   * @param id El ID del documento a eliminar.
+   */
+deleteSolicitudServicio(id: string): Promise<void> {
+  const docRef = doc(this._firestore, this._nombreColeccionServicio, id);
+  toast.promise(deleteDoc(docRef), {
+      loading: 'Eliminando solicitud...',
+      success: 'Solicitud eliminada.',
+      error: 'Error al eliminar.'
+    });
+  return deleteDoc(docRef);
+}
+updateSolicitudCredito(id: string, data: Partial<SolicitudCredito>): Promise<void> {
+  const docRef = doc(this._firestore, this._nombreColeccionCredito, id);
+  toast.promise(updateDoc(docRef, data), {
+      loading: 'Guardando cambios...',
+      success: 'Solicitud actualizada con éxito.',
+      error: 'Error al actualizar la solicitud.'
+    });
+  return updateDoc(docRef, data);
+}
+
+deleteSolicitudCredito(id: string): Promise<void> {
+  const docRef = doc(this._firestore, this._nombreColeccionCredito, id);
+  toast.promise(deleteDoc(docRef), {
+      loading: 'Eliminando solicitud...',
+      success: 'Solicitud eliminada.',
+      error: 'Error al eliminar.'
+    });
+  return deleteDoc(docRef);
+}
+
 }
