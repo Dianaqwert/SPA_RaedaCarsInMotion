@@ -9,10 +9,11 @@
       </div>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
-      aria-label="Toggle navigation">
+      data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+      aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
 
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav mx-auto">
@@ -49,40 +50,61 @@
   </div>
 </nav>
 
-@if(sideBar===true){
-      <aside class="my-sidebar" >
-        <button class="close-btn" (click)="mostrarAccWeb()">x</button>
-        <h4 style="padding-top: 25px;">Accecsibilidad Web</h4>
-        <nav>
-          <ul class="accesibilidad-list list-unstyled d-flex flex-column gap-3">
-            <!-- Idioma y controles -->
-            <p>Controles de lectura</p>
+@if(sideBar === true) {
+  <aside [ngClass]="{'offcanvas offcanvas-end show': isLargeScreen, 'modal-center': !isLargeScreen}" class="my-sidebar" tabindex="-1">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Accesibilidad Web</h5>
+    </div>
+    <div class="offcanvas-body">
+      <nav>
+        <ul class="list-unstyled d-flex flex-column gap-3">
+          <!-- Controles de lectura -->
+          <li>
+            <p class="fw-bold mb-1">Controles de lectura</p>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-outline-primary btn-sm" (click)="leerPaginaCompleta('es')">📖 Leer</button>
+              <button class="btn btn-outline-primary btn-sm" (click)="pausarLectura()">⏸️</button>
+              <button class="btn btn-outline-primary btn-sm" (click)="reanudarLectura()">▶️</button>
+              <button class="btn btn-outline-primary btn-sm" (click)="detenerLectura()">⏹️</button>
+            </div>
+          </li>
 
-            <li class="accesibilidad-item d-flex align-items-center gap-2 flex-wrap">
-              <button class="btn btn-accesible" aria-label="Leer en español"  (click)="leerPaginaCompleta('es')">📖 Leer</button>
-              <button class="btn btn-accesible" aria-label="Pausar lectura"   (click)="pausarLectura()">⏸️</button>
-              <button class="btn btn-accesible" aria-label="Detener lectura"  (click)="reanudarLectura()">▶️</button>
-              <button class="btn btn-accesible" aria-label="Detener lectura"  (click)="detenerLectura()">⏹️</button>
-            </li>
-            <hr>
-            <p>Tamaño de fuente</p>
-            <!-- Tamaño de fuente -->
-            <li class="accesibilidad-item d-flex align-items-center gap-2 flex-wrap">
-              
-              <button class="btn btn-accesible" aria-label="Fuente">Fuente</button>
-              <button class="btn btn-accesible" aria-label="Aumentar fuente">+</button>
-              <button class="btn btn-accesible" aria-label="Disminuir fuente">−</button>
-            </li>
+          <hr>
 
-            <hr>
-            <p>Contraste de color</p>
-            <!-- Contraste -->
-            <li class="accesibilidad-item d-flex align-items-center gap-2 flex-wrap">
-              
-              <button class="btn btn-accesible" aria-label="Modo contraste amarillo">Con contraste</button>
-              <button class="btn btn-accesible" aria-label="Modo contraste oscuro">Sin contraste</button>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-    }
+          <!-- Tamaño de fuente -->
+          <li>
+            <p class="fw-bold mb-1">Tamaño de fuente</p>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-outline-secondary btn-sm">Fuente</button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="aumentarTexto()">A+</button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="disminuirTexto()">A−</button>
+            </div>
+          </li>
+
+          <hr>
+
+          <!-- Contraste -->
+          <li>
+            <p class="fw-bold mb-1">Contraste de color</p>
+            <div class="d-flex flex-wrap gap-2">
+              <select (change)="cambiarFuente($event)">
+                <option value="Arial">Arial</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Roboto">Roboto</option>
+              </select>
+            </div>
+          </li>
+        </ul>
+
+        <hr>
+
+        <div clasS="salir">
+          <a class="btn btn-success" (click)="mostrarAccWeb()">
+            Cerrar
+
+          </a>
+        </div>
+      </nav>
+    </div>
+  </aside>
+}

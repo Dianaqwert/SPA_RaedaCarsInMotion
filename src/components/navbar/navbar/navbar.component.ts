@@ -29,6 +29,7 @@ export class NavbarComponent {
   speech = new SpeechSynthesisUtterance();
   voces: SpeechSynthesisVoice[] = [];
   vozSabina?: SpeechSynthesisVoice;
+  isLargeScreen = window.innerWidth >= 992; 
 
   ngOnInit(): void {
     // Cargar las voces disponibles
@@ -41,6 +42,13 @@ export class NavbarComponent {
       });
 
     };
+
+    window.addEventListener('resize', () => {
+      this.isLargeScreen = window.innerWidth >= 992;
+    });
+
+
+
   }
 
   /* Entorno de accesibilidad */
@@ -95,6 +103,22 @@ export class NavbarComponent {
     window.speechSynthesis.cancel();
   }
 
+  tamanioLetra =20;
+
+  aumentarTexto() {
+    this.tamanioLetra += 2;
+    document.documentElement.style.setProperty('--tamano-texto', `${this.tamanioLetra}px`);
+  }
+
+  disminuirTexto() {
+    this.tamanioLetra -= 2;
+    document.documentElement.style.setProperty('--tamano-texto', `${this.tamanioLetra}px`);
+  }
+
+  cambiarFuente(event: Event) {
+    const fuente = (event.target as HTMLSelectElement).value;
+    document.body.style.fontFamily = fuente;
+  }
 
 
 

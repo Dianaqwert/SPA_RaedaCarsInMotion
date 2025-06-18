@@ -1,25 +1,9 @@
 
-*{
-    font-family: "DM Sans", sans-serif;
+* {
+  font-size: var(--tamano-texto, 20px);
+  font-family: var(--fuente-principal, "DM Sans"), sans-serif;
 }
 
-div{
-    font-size: 1rem;
-    align-items: center;
-}
-
-.brand-text .title {
-    font-style: italic;
-    font-size: 1rem;
-    color: #050003;
-}
-  
-.brand-text .subtitle {
-    font-size: 0.9rem;
-    color: #FFA739;
-    margin-top: -4px; /* opcional, para acercarlo más al título */
-}
-  
 
 .custom-navbar {
     background-color: #FFFFFF;
@@ -123,7 +107,7 @@ a{
 
 .container-fluid {
     display: flex;
-    justify-content: center !important; /* Forzar centrado */
+    justify-content: center;
     align-items: center;
     width: 100%;
     max-width: 1400px;
@@ -153,7 +137,7 @@ a{
 
 @media (max-width: 991.98px) {
     .container-fluid {
-        justify-content: center !important;
+        justify-content: center;
         padding: 0 1rem;
     }
     
@@ -177,18 +161,43 @@ a{
 }
 
 /*Accesibilidad web*/
-.my-sidebar {
+
+@media (max-width: 767.98px) {
+  .my-sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+    background-color: #fff;
+    padding: 1rem;
+    display: block;
+    margin-top: 1rem;
+  }
+
+  .my-sidebar .close-btn {
+    display: none; /* ya no se necesita cerrar en versión móvil */
+  }
+}
+
+
+/* Estilo para pantallas grandes (conserva offcanvas) */
+.my-sidebar.offcanvas {
+  width: 300px;
+}
+
+/* Estilo para pantallas pequeñas: centro tipo modal */
+.modal-center {
   position: fixed;
-  top: 0;
-  right: 0;
-  width: 280px;
-  height: 100vh;
-  background: #fff;
-  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  top: 50%;
+  left: 50%;
+  width: 90vw;
+  max-width: 400px;
+  transform: translate(-50%, -50%);
+  z-index: 1055;
+  background-color: white;
   padding: 1rem;
-  z-index: 1050;
-  align-items: baseline;
-  display: flexbox;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .my-sidebar .close-btn {
@@ -236,4 +245,13 @@ a{
   width: 1px;
   height: 1px;
   overflow: hidden;
+}
+
+.salir{
+    display:grid;
+    align-items: center;
+}
+
+.iconos{
+    font-size: 1.5rem;
 }

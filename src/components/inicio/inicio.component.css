@@ -1,4 +1,25 @@
 
+* {
+  font-size: var(--tamano-texto, 20px);
+  font-family: var(--fuente-principal, "DM Sans"), sans-serif;
+}
+
+.intro {
+  font-family: var(--fuente-principal, "DM Sans"), sans-serif; 
+  font-size: var(--tamano-texto, 42px);
+}
+
+.text {
+  font-size: var(--tamano-texto, 35px);
+}
+
+h1, h3 {
+  font-size: var(--tamano-texto, 30px);
+}
+
+.text-body-emphasis {
+  font-size: var(--tamano-texto, 30px);
+}
 
 /*______________________CAROUSEL_____________________________*/
 .carousel{
@@ -21,16 +42,18 @@
 }
 
 .carousel-caption h5{
-    font-size: 2rem;
+    font-size: 30px;
     color:#FFFFFF;
 }
 
 .carousel-caption p{
-    font-size: 1.5rem;
+    font-size: 25px;
 }
 
 .carousel-caption p strong{
     color:#FCE07F;
+    font-size: 30px;
+    
 }
 
 /*______Grid areas___________*/
