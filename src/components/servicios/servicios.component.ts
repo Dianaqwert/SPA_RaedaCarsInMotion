@@ -33,8 +33,8 @@ export class ServiciosComponent {
   fechaMax:string;
   //local
   ultimoRegistro: any = null;
-  idSol = input.required<string>();
   private user = inject(AuthStateService);
+  private username = this.user.currentUserProfile()?.username || "";
   private router = inject(Router);
   private request = inject(SolicitudService);
 
@@ -324,9 +324,7 @@ export class ServiciosComponent {
   }
 
   //guardar local
-  async guardarInformacion(){
-    
-
+  async guardarInformacion(){    
       // Obtener registros existentes o crear array nuevo
       //registros -> objeto
       
@@ -335,7 +333,7 @@ export class ServiciosComponent {
         fechaDeRegistro:new Date().toISOString(),
         nombre:this.form.value.nombre,
         apellidos:this.form.value.apellidos,
-        username:this.form.value.username,
+        username: this.username,
         email:this.form.value.email,
         direccion:this.form.value.direccion,
         cp:this.form.value.cp,
@@ -364,7 +362,7 @@ export class ServiciosComponent {
           if (result.isConfirmed) {
             // Acción si confirma
             try{
-              await this.request.createSolicitud(nuevoReg);
+              await this.request.createSolicitudServicio(nuevoReg);
               this.form.reset(); // Limpia el formulario después de un envío exitoso
             } catch {
                 Swal.fire('Capturando', 'Tu información ha sido guardada.', 'success');
