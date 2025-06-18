@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
@@ -15,10 +15,14 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import Swal from 'sweetalert2';
+import { toast } from 'ngx-sonner';
+import { v4 as uuidv4 } from 'uuid'; // <--- ¡Importa la función para generar UUIDs!
 
+
+import { AuthStateService } from '../../../app/features/auth/core/data-user/auth-state.service';
+import { SolicitudService } from '../../../app/features/panel/data-solicitud/solicitudes.service';
 @Pipe({
   name: 'youtubeEmbed',
-  standalone: true
 })
 export class YoutubeEmbedPipe implements PipeTransform {
   constructor(private sanitizer: DomSanitizer) {}
@@ -56,6 +60,8 @@ export class YoutubeEmbedPipe implements PipeTransform {
     MatListModule,
     MatTooltipModule
   ],
+  providers: [SolicitudService],  // <-- Añade esto aquí si SolicitudService no tiene providedIn: 'root'
+
   templateUrl: './financiamiento.component.html',
   styleUrls: ['./financiamiento.component.css']
 })
@@ -67,23 +73,21 @@ export class FinanciamientoComponent implements OnInit {
   autoSeleccionado: any = null;
   montoMinimo: number = 50000;
   errorMonto: string = '';
-  nombreUsuario: string = '';
-  errorNombreUsuario: string = '';
-
   videoUrl = 'https://www.youtube.com/watch?v=6kJYQry7KjQ&t=3s';
 
   // Formulario de solicitud de préstamo
-  telefono: string = '';
+
   formSubmitted: boolean = false;
   errorTelefono: string = '';
   errorMontoPrestamo: string = '';
   errorPlazo: string = '';
   errorPagoMensual: string = '';
-  envios: number = 0;
   solicitudes: any[] = [];
+  private user = inject(AuthStateService);
+  private router = inject(Router);
+  private username = this.user.currentUserProfile()?.username || "";
+  private request = inject(SolicitudService);
 
-  // Recibe el nombre del usuario desde el padre
-  @Input() nombrePadre: string = 'Rene';
 
   // Emite un evento al padre cuando se envía la solicitud
   @Output() solicitudEnviada = new EventEmitter<any>();
@@ -92,7 +96,6 @@ export class FinanciamientoComponent implements OnInit {
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef
   ) {
-    this.cargarSolicitudes();
   }
 
   ngOnInit() {
@@ -100,18 +103,12 @@ export class FinanciamientoComponent implements OnInit {
     this.calcularFinanciamiento();
   }
 
-  cargarSolicitudes() {
-    this.solicitudes = JSON.parse(localStorage.getItem('solicitudesFinanciamiento') || '[]');
-  }
 
-  validarNombreUsuario() {
-    if (!this.nombreUsuario) {
-      this.errorNombreUsuario = 'El nombre de usuario es requerido';
-    } else if (this.nombreUsuario.length < 3) {
-      this.errorNombreUsuario = 'El nombre debe tener al menos 3 caracteres';
-    } else {
-      this.errorNombreUsuario = '';
-    }
+
+  validarUsuarioActivo(): boolean {
+    const userProfile = this.user.currentUserProfile();
+    console.log('Usuario activo para validación:', userProfile); // Debugging
+    return !!userProfile; // Retorna true si hay un perfil de usuario, false si es null o undefined
   }
 
   validarMontoPrestamo() {
@@ -145,78 +142,102 @@ export class FinanciamientoComponent implements OnInit {
     }
   }
 
-  // Validación extra: teléfono debe ser 10 dígitos
-  validarTelefono() {
-    if (!this.telefono) {
-      this.errorTelefono = 'El teléfono es requerido';
-    } else if (!/^\d{10}$/.test(this.telefono)) {
-      this.errorTelefono = 'El teléfono debe tener 10 dígitos';
-    } else {
-      this.errorTelefono = '';
-    }
-  }
+
 
   // Validación general del formulario
-  formularioValido(): boolean {
+  formularioValido() {
     this.validarMontoPrestamo();
     this.validarPlazo();
     this.validarPagoMensual();
-    this.validarTelefono();
-    this.validarNombreUsuario();
     return (
       this.montoPrestamo >= this.montoMinimo &&
       this.montoPrestamo % 1000 === 0 &&
       this.plazoMeses !== undefined &&
       [24, 36, 48, 60].includes(this.plazoMeses) &&
       this.pagoMensual > 0 &&
-      !!this.telefono &&
-      !!this.nombreUsuario &&
       !this.errorMontoPrestamo &&
       !this.errorPlazo &&
       !this.errorPagoMensual &&
-      !this.errorTelefono &&
-      !this.errorNombreUsuario
+      !this.errorTelefono
     );
   }
 
-  solicitarPrestamo() {
+  async solicitarPrestamo() {
     this.formSubmitted = true;
     this.validarMontoPrestamo();
     this.validarPlazo();
     this.validarPagoMensual();
-    this.validarTelefono();
-    this.validarNombreUsuario();
+  
     if (this.formularioValido()) {
+      // **PRIMERO: Verificar si el usuario está activo ANTES de intentar enviar la solicitud**
+      if (!this.validarUsuarioActivo()) { // Si NO hay usuario activo...
+        const result = await Swal.fire({
+          title: 'No hay ningún usuario logueado',
+          text: 'Para acceder a ciertas funcionalidades, necesitas iniciar sesión o crear una cuenta.',
+          icon: 'info',
+          showCancelButton: true,
+          showDenyButton: true,
+          confirmButtonText: 'Iniciar Sesión',
+          denyButtonText: 'Crear Cuenta',
+          cancelButtonText: 'Cerrar',
+          reverseButtons: true,
+          customClass: {
+            confirmButton: 'btn btn-primary me-2',
+            denyButton: 'btn btn-success me-2',
+            cancelButton: 'btn btn-secondary me-2'
+          },
+          buttonsStyling: false
+        });
+  
+        if (result.isConfirmed) {
+          this.router.navigateByUrl('sesion/sign-in');
+        } else if (result.isDenied) {
+          this.router.navigateByUrl('sesion/sign-up');
+        }
+        return; // <-- ¡SALIR AQUÍ! Si el usuario no está logueado, no intentes crear la solicitud.
+      }
+  
+      // Si llegamos hasta aquí, significa que this.validarUsuarioActivo() devolvió true,
+      // lo que implica que SÍ hay un usuario logueado.
+  
       const nuevaSolicitud = {
-        nombreUsuario: this.nombreUsuario,
-        montoPrestamo: this.montoPrestamo,
-        plazoMeses: this.plazoMeses,
-        pagoMensual: this.pagoMensual,
-        telefono: this.telefono,
+        id: uuidv4(), // Esto es un ID de cliente, Firestore generará su propio ID de documento.
+        username: this.username,
+        montoPrestamo: this.montoPrestamo.toString(),
+        plazoMeses: this.plazoMeses?.toString() || '',
+        pagoMensual: this.pagoMensual.toString(),
         fecha: new Date().toLocaleString(),
         estado: 'pendiente'
+        // El 'userId' se agrega en SolicitudService, ¡NO lo agregues aquí también!
       };
-      let solicitudes = JSON.parse(localStorage.getItem('solicitudesFinanciamiento') || '[]');
-      solicitudes.push(nuevaSolicitud);
-      localStorage.setItem('solicitudesFinanciamiento', JSON.stringify(solicitudes));
-      this.envios++;
-      this.cargarSolicitudes();
-
-      // Emitir evento al padre
-      this.solicitudEnviada.emit(nuevaSolicitud);
-
+  
       Swal.fire({
-        title: '¡Éxito!',
-        text: 'Solicitud enviada con éxito',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#FFA739',
-        timer: 3000,
-        timerProgressBar: true
+        title: '¿Estás seguro?',
+        text: 'Una vez enviada, no podrás revertir esta solicitud (solo un administrador).', // Mejorar el texto
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, enviar solicitud',
+        cancelButtonText: 'Cancelar'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            // La llamada al servicio
+            await this.request.createSolicitudCredito(nuevaSolicitud);
+            Swal.fire('¡Enviado!', 'Tu solicitud de crédito ha sido registrada con éxito.', 'success');
+            // Resetear los campos del formulario
+            this.montoPrestamo = 50000;
+            this.plazoMeses = undefined;
+            this.pagoMensual = 0;
+          } catch (error: any) {
+            console.error('Error al enviar la solicitud de crédito:', error);
+            // Muestra un mensaje de error más específico al usuario
+            Swal.fire('Error', `No se pudo enviar la solicitud: ${error.message || 'Error desconocido'}`, 'error');
+          }
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire('Cancelado', 'La solicitud ha sido cancelada.', 'info');
+        }
       });
-
-      this.telefono = '';
-      this.nombreUsuario = '';
+  
       this.formSubmitted = false;
     }
   }
@@ -248,17 +269,9 @@ export class FinanciamientoComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  cambiarEstado(solicitud: any, nuevoEstado: string) {
-    solicitud.estado = nuevoEstado;
-    let solicitudes = JSON.parse(localStorage.getItem('solicitudesFinanciamiento') || '[]');
-    const index = solicitudes.findIndex((s: any) => s.fecha === solicitud.fecha);
-    if (index !== -1) {
-      solicitudes[index] = solicitud;
-      localStorage.setItem('solicitudesFinanciamiento', JSON.stringify(solicitudes));
-      this.cargarSolicitudes();
-    }
-  }
 }
+
+
 
 
 

@@ -213,24 +213,6 @@
               }
             </div>
 
-            <!-- Teléfono -->
-            <div class="mb-3">
-              <label class="form-label">Teléfono</label>
-              <input type="tel" class="form-control" [(ngModel)]="telefono" name="telefono" maxlength="10" minlength="10" pattern="[0-9]{10}" required (input)="validarTelefono()">
-              @if ((formSubmitted || telefono) && errorTelefono) {
-                <div class="solicitud-error text-danger small mt-1">{{errorTelefono}}</div>
-              }
-            </div>
-
-            <!-- Nombre de Usuario -->
-            <div class="mb-3">
-              <label class="form-label">Nombre de Usuario</label>
-              <input type="text" class="form-control" [(ngModel)]="nombreUsuario" name="nombreUsuario" minlength="3" required (input)="validarNombreUsuario()">
-              @if ((formSubmitted || nombreUsuario) && errorNombreUsuario) {
-                <div class="solicitud-error text-danger small mt-1">{{errorNombreUsuario}}</div>
-              }
-            </div>
-
             <button type="submit" class="solicitud-btn btn btn-primary w-100" [disabled]="!formularioValido()">
               Solicitar Préstamo
             </button>
