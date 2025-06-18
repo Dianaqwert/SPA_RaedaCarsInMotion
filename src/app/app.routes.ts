@@ -5,6 +5,7 @@ import { ServiciosComponent } from '../components/servicios/servicios.component'
 import { FinanciamientoComponent } from '../components/financiamiento/financiamiento/financiamiento.component';
 import { CatalogoComponent } from '../components/catalogo/catalogo/catalogo.component';
 import { DetalleAutoComponent } from '../components/detalle-auto/detalle-auto.component';
+import { adminGuard } from './features/auth/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,7 @@ export const routes: Routes = [
 
   {
     path: 'admin/panel',
+    canActivate: [adminGuard], // ¡Aquí se aplica la guarda!
     loadComponent: () => import('./features/panel/admin/admin.component'),
   },
   {

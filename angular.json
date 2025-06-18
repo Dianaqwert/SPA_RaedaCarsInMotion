@@ -13,9 +13,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            
             "outputPath": "dist/spa-raeda-cars-in-motion",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src"
+              ]
+            },
             "polyfills": [
               "zone.js"
             ],
