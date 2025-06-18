@@ -43,8 +43,6 @@ export class SolicitudService {
     this._collectionRefCredito = collection(this._firestore, this._nombreColeccionCredito) as CollectionReference<SolicitudCredito>;
 
   }
-
-
   /**
    * Crea un nuevo documento de solicitud de servicio en Firestore.
    * Asocia la solicitud con el UID del usuario actualmente autenticado.
@@ -121,4 +119,19 @@ export class SolicitudService {
     }
   }
 
+  getSolicitudesServicio(): Observable<SolicitudServicio[]> {
+    const collectionQuery = query(this._collectionRefServicio);
+    // Usamos collectionData para obtener los datos como un array y que se actualice en tiempo real.
+    // El idField opcional nos permite obtener el ID del documento dentro del objeto.
+    return collectionData(collectionQuery, { idField: 'id' }) as Observable<SolicitudServicio[]>;
+  }
+
+  /**
+   * Obtiene todas las solicitudes de crédito de la colección 's-credito'.
+   * @returns Un Observable con un array de todas las solicitudes de crédito.
+   */
+  getSolicitudesCredito(): Observable<SolicitudCredito[]> {
+    const collectionQuery = query(this._collectionRefCredito);
+    return collectionData(collectionQuery, { idField: 'id' }) as Observable<SolicitudCredito[]>;
+  }
 }

@@ -1,12 +1,153 @@
-<mat-card class="admin-card mat-elevation-z8">
-    <mat-card-header class="card-header">
-      <mat-card-title class="center-title">
-        <h2 class="panel-title">Panel de Administración</h2>
-        <div class="user-info">
-          <h2 class="user-name">a</h2>
-          <button mat-icon-button class="logout-btn" matTooltip="Cerrar sesión">
-            <mat-icon>logout</mat-icon>
-          </button>
+<div class="ml-5 mr-5 container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 400px;">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <div *ngIf="!isLoading">
+        <div class="row mb-5">
+          <div class="col-12">
+            <mat-card class="shadow-sm">
+              <mat-card-header class="text-center">
+                <mat-card-title >
+                  <h2 class="d-flex align-items-center">
+                    <h2 class="d-flex align-items-center justify-content-center">
+                    <mat-icon class="me-2">miscellaneous_services</mat-icon>
+                    Solicitudes de Servicio
+                    </h2>
+                  </h2>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="table-responsive mat-elevation-z2 rounded">
+                  <table mat-table [dataSource]="dataSourceServicios" matSort #sortServicios="matSort" class="w-100">
+
+                    <ng-container matColumnDef="fechaDeRegistro">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Registro</th>
+                      <td mat-cell *matCellDef="let element">{{element.fechaDeRegistro}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="nombreCompleto">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+                      <td mat-cell *matCellDef="let element">{{element.nombre}} {{element.apellidos}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="email">
+                      <th mat-header-cell *matHeaderCellDef>Email</th>
+                      <td mat-cell *matCellDef="let element">{{element.email}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="servicios">
+                      <th mat-header-cell *matHeaderCellDef>Servicios</th>
+                      <td mat-cell *matCellDef="let element">{{element.servicios}}</td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="fechaCita">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Cita</th>
+                        <td mat-cell *matCellDef="let element">{{element.fechaCita}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="estado">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                      <td mat-cell *matCellDef="let element">{{element.estado}}</td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="urgencia">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Urgencia</th>
+                        <td mat-cell *matCellDef="let element">{{element.urgencia}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                      <td mat-cell *matCellDef="let element">
+                        <button mat-button color="primary"><mat-icon>visibility</mat-icon></button>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsServicios"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsServicios;"></tr>
+                  </table>
+
+                  <mat-paginator #paginatorServicios="matPaginator" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
         </div>
-      </mat-card-title>
-    </mat-card-header>
+
+        <div class="row">
+          <div class="col-12">
+            <mat-card class="shadow-sm">
+              <mat-card-header class="mb-3">
+                <mat-card-title>
+                  <h2 class="d-flex align-items-center">
+                    <h2 class="d-flex align-items-center justify-content-center">
+                    <mat-icon class="me-2">credit_card</mat-icon>
+                    Solicitudes de Crédito
+                  </h2>
+                </h2>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="table-responsive mat-elevation-z2 rounded">
+                  <table mat-table [dataSource]="dataSourceCreditos" matSort #sortCreditos="matSort" class="w-100">
+
+                    <ng-container matColumnDef="fecha">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+                      <td mat-cell *matCellDef="let element">{{element.fecha}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="username">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Solicitante</th>
+                      <td mat-cell *matCellDef="let element">{{element.username}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="montoPrestamo">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto Préstamo</th>
+                      <td mat-cell *matCellDef="let element">{{element.montoPrestamo | currency:'MXN'}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="plazoMeses">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Plazo</th>
+                      <td mat-cell *matCellDef="let element">{{element.plazoMeses}} meses</td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="pagoMensual">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Pago Mensual</th>
+                      <td mat-cell *matCellDef="let element">{{element.pagoMensual | currency:'MXN'}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="estado">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                      <td mat-cell *matCellDef="let element">
+                        <span class="badge" [ngClass]="{
+                          'bg-warning text-dark': element.estado === 'Pendiente',
+                          'bg-success': element.estado === 'Aprobado',
+                          'bg-danger': element.estado === 'Rechazado'
+                        }">
+                          {{element.estado}}
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                        <td mat-cell *matCellDef="let element">
+                          <button mat-button color="primary"><mat-icon>visibility</mat-icon></button>
+                        </td>
+                      </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsCreditos"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsCreditos;"></tr>
+                  </table>
+                  <mat-paginator #paginatorCreditos="matPaginator" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

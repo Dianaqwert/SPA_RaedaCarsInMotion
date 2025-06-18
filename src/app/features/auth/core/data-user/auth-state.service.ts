@@ -1,5 +1,5 @@
 // src/app/features/auth/core/data-user/auth-state.service.ts
-import { inject, Injectable, signal, Signal } from '@angular/core';
+import { computed, inject, Injectable, signal, Signal } from '@angular/core';
 import {
   Auth,
   signOut,
@@ -30,6 +30,8 @@ export class AuthStateService {
   public currentUserAuth = signal<User | null>(null);
   public currentUserProfile = signal<UserProfile | null>(null);
   public userEmail = signal<string | null>(null);
+  public isLoggedIn = computed(() => this.currentUserAuth() !== null);
+  public isAuthResolved = signal<boolean>(false);
 
   constructor() {
     firebaseUserObservable(this.auth).pipe(
@@ -54,6 +56,7 @@ export class AuthStateService {
             this.currentUserProfile.set(profile);
             this.userEmail.set(profile.email);
             console.log('AuthStateService: Perfil de usuario existente cargado.', profile.email, 'Admin:', profile.isAdmin);
+            console.log(this.currentUserProfile());
           } else {
             console.warn(`AuthStateService: Usuario ${user.uid} autenticado, pero no se encontró perfil en Firestore. Creando uno básico.`);
             const newProfile: UserProfile = {
@@ -79,6 +82,9 @@ export class AuthStateService {
         this.userEmail.set(null);
         console.log('AuthStateService: Usuario desautenticado. Signals reiniciadas.');
       }
+      this.isAuthResolved.set(true);
+      console.log('AuthStateService: Autenticación resuelta. Estado final:', user ? user.email : 'Sin usuario');
+    
     });
   }
 
