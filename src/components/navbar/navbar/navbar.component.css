@@ -5,6 +5,7 @@
 }
 
 
+
 .custom-navbar {
     background-color: #FFFFFF;
     color: #050003;
@@ -73,7 +74,6 @@ a{
     transition: background-color 0.3s ease, color 0.3s ease;
     font-weight: 500;
     text-decoration: none; /* para quitar subrayado si lo hubiera */
-    font-family: "DM Sans", sans-serif;
     font-size: 1rem;
     text-align: center;
 }
@@ -172,7 +172,9 @@ a{
     padding: 1rem;
     display: block;
     margin-top: 1rem;
+    text-align: center;
   }
+
 
   .my-sidebar .close-btn {
     display: none; /* ya no se necesita cerrar en versión móvil */
@@ -184,6 +186,7 @@ a{
 .my-sidebar.offcanvas {
   width: 300px;
 }
+
 
 /* Estilo para pantallas pequeñas: centro tipo modal */
 .modal-center {
@@ -200,15 +203,12 @@ a{
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.my-sidebar .close-btn {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-}
 
+
+.d-flex{
+    text-align: center;
+    align-items: center;
+}
 
 .AccWrb{
     display: flex;
@@ -250,8 +250,16 @@ a{
 .salir{
     display:grid;
     align-items: center;
+    padding: 10px;
 }
 
 .iconos{
-    font-size: 1.5rem;
+    font-size: 2.5rem;
 }
+
+.offcanvas-header{
+    align-items: center;
+    text-align: center;
+}
+
+

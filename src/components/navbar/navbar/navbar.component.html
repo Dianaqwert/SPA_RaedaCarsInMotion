@@ -8,6 +8,7 @@
         <span class="subtitle">Cars in motion</span>
       </div>
     </a>
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
       data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
       aria-expanded="false" aria-label="Toggle navigation">
@@ -40,8 +41,8 @@
 
         <!--Accesibilidad web-->
         @if(routerAcc.url==='/inicio'){
-          <a class="nav-link" style="font-size: 2.5rem;" (click)="mostrarAccWeb()">
-            <i class="bi bi-person-wheelchair"></i>
+          <a class="nav-link"(click)="mostrarAccWeb()" style="font-size: 56px;" >
+            <i class="bi bi-person-wheelchair iconos"></i>
           </a>
         }
         
@@ -55,6 +56,7 @@
     <div class="offcanvas-header">
       <h5 class="offcanvas-title">Accesibilidad Web</h5>
     </div>
+    <hr>
     <div class="offcanvas-body">
       <nav>
         <ul class="list-unstyled d-flex flex-column gap-3">
@@ -67,44 +69,44 @@
               <button class="btn btn-outline-primary btn-sm" (click)="reanudarLectura()">▶️</button>
               <button class="btn btn-outline-primary btn-sm" (click)="detenerLectura()">⏹️</button>
             </div>
+            <hr>
           </li>
-
-          <hr>
 
           <!-- Tamaño de fuente -->
           <li>
-            <p class="fw-bold mb-1">Tamaño de fuente</p>
+            <p class="fw-bold mb-1">Tamaño y fuente</p>
             <div class="d-flex flex-wrap gap-2">
-              <button class="btn btn-outline-secondary btn-sm">Fuente</button>
+              
+              <select (change)="cambiarFuente($event)">
+                <option value="'Times New Roman',serif">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+                <option value="'Roboto',sans-serif">Roboto</option>
+                <option value="'DM Sans', sans-serif">Default</option>
+              </select>
+
               <button class="btn btn-outline-secondary btn-sm" (click)="aumentarTexto()">A+</button>
               <button class="btn btn-outline-secondary btn-sm" (click)="disminuirTexto()">A−</button>
             </div>
+            <hr>
           </li>
 
-          <hr>
+          
 
           <!-- Contraste -->
           <li>
             <p class="fw-bold mb-1">Contraste de color</p>
             <div class="d-flex flex-wrap gap-2">
-              <select (change)="cambiarFuente($event)">
-                <option value="Arial">Arial</option>
-                <option value="Verdana">Verdana</option>
-                <option value="Roboto">Roboto</option>
-              </select>
+              <button class="btn btn-outline-secondary btn-sm"  (click)="toggleContraste()">Activar/Desactivar</button>
             </div>
           </li>
         </ul>
-
-        <hr>
-
-        <div clasS="salir">
-          <a class="btn btn-success" (click)="mostrarAccWeb()">
-            Cerrar
-
-          </a>
-        </div>
       </nav>
+    </div>
+    <hr>
+    <div class="salir">
+      <a class="btn btn-success" (click)="mostrarAccWeb()">
+        Cerrar
+      </a>
     </div>
   </aside>
 }

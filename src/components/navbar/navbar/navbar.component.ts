@@ -1,7 +1,7 @@
 // src/components/navbar/navbar/navbar.component.ts
 
 import { Component, inject } from '@angular/core';
-import { RouterModule, Router } from '@angular/router'; // Asegúrate que Router es de @angular/router
+import { RouterModule, Router, NavigationEnd } from '@angular/router'; // Asegúrate que Router es de @angular/router
 import { AsyncPipe } from '@angular/common'; // Si usaras el async pipe para otras cosas, mantenlo
 
 // ¡MUY IMPORTANTE! Verifica esta ruta. Debe ser la ruta CORRECTA
@@ -12,6 +12,8 @@ import { toast } from 'ngx-sonner'; // Asegúrate de que ngx-sonner esté instal
 import { CommonModule } from '@angular/common';
 import { ViewChild } from '@angular/core';
 import { ElementRef } from '@angular/core';
+import { ContrasteService } from '../../../services/contraste/contraste.service';
+import { documentId } from 'firebase/firestore';
 
 @Component({
   selector: 'app-navbar',
@@ -30,8 +32,12 @@ export class NavbarComponent {
   voces: SpeechSynthesisVoice[] = [];
   vozSabina?: SpeechSynthesisVoice;
   isLargeScreen = window.innerWidth >= 992; 
+  modoContrasteAlto = false;
+  /* Entorno de accesibilidad */
+  public routerAcc;
 
   ngOnInit(): void {
+
     // Cargar las voces disponibles
     window.speechSynthesis.onvoiceschanged = () => {
       this.voces = window.speechSynthesis.getVoices();
@@ -47,14 +53,22 @@ export class NavbarComponent {
       this.isLargeScreen = window.innerWidth >= 992;
     });
 
-
+    //contraste 
+    this.routerAcc.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        if (event.url !== '/inicio' && this.servicioAcc.isHighContrastEnabled()) {
+          document.body.classList.remove('high-contrast');
+          this.servicioAcc.disableHighContrast();
+        }
+      }
+    });
 
   }
 
-  /* Entorno de accesibilidad */
-  public routerAcc;
-  constructor(routerAcc: Router) {
+
+  constructor(routerAcc: Router , private servicioAcc:ContrasteService) {
     this.routerAcc = routerAcc;
+    
   }
 
   /*sidebar*/
@@ -117,10 +131,21 @@ export class NavbarComponent {
 
   cambiarFuente(event: Event) {
     const fuente = (event.target as HTMLSelectElement).value;
-    document.body.style.fontFamily = fuente;
+    document.documentElement.style.setProperty('--fuente-principal',fuente);
   }
 
 
+  toggleContraste() {
+    const isEnabled  = this.servicioAcc.isHighContrastEnabled();
+
+    if (!isEnabled && this.routerAcc.url === '/inicio') {
+      document.body.classList.add('high-contrast');
+      this.servicioAcc.enableHighContrast();
+    } else {
+      document.body.classList.remove('high-contrast');
+      this.servicioAcc.disableHighContrast();
+    }
+  }
 
   /*----FIREBASE----*/
   // ¡Aquí es donde inyectamos el servicio y lo hacemos PÚBLICO!

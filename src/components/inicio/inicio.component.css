@@ -24,7 +24,6 @@ h1, h3 {
 /*______________________CAROUSEL_____________________________*/
 .carousel{
     padding-top:20px;
-    font-family: "DM Sans", sans-serif;
     padding-bottom: 50px;
 }
 
@@ -62,7 +61,6 @@ h1, h3 {
     padding-top: 60px;
     margin: auto;
     padding: 20px;
-    font-family: "DM Sans", sans-serif;
     padding-bottom: 100px;
 
     display: grid;
@@ -192,7 +190,6 @@ h1, h3 {
 
 
 .footer{
-    font-family: "DM Sans", sans-serif;
     text-align: center;
     padding: 20px;
     padding-top: 50px;
@@ -221,3 +218,5 @@ h1, h3 {
     position: relative;
 
 }
+
+/*contraste*/

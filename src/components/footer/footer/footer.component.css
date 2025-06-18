@@ -1,0 +1,5 @@
+
+* {
+  font-size: var(--tamano-texto, 20px);
+  font-family: var(--fuente-principal, "DM Sans"), sans-serif;
+}
