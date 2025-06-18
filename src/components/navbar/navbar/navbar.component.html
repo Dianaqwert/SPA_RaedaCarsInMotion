@@ -8,19 +8,22 @@
         <span class="subtitle">Cars in motion</span>
       </div>
     </a>
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
-      aria-label="Toggle navigation">
+      data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+      aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
 
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav mx-auto">
         <a class="nav-link" [routerLink]="['/inicio']">Inicio</a>
-          <a class="nav-link" [routerLink]="['/catalogo']">Catálogo</a>
-          <a class="nav-link" [routerLink]="['/servicios']">Servicios</a>
-          <a class="nav-link" [routerLink]="['/financiamiento']">Financiamiento</a>
-          <a class="nav-link" [routerLink]="['/equipo']">Equipo</a>
+        <a class="nav-link" [routerLink]="['/catalogo']">Catálogo</a>
+        <a class="nav-link" [routerLink]="['/servicios']">Servicios</a>
+        <a class="nav-link" [routerLink]="['/financiamiento']">Financiamiento</a>
+        <a class="nav-link" [routerLink]="['/equipo']">Equipo</a>
+
         @if(authState.currentUserProfile(); as profile) {
           <a class="btn btn-orange">Saludos! {{ profile.username }}</a>
           <!-- Lógica condicional para Admin vs. Solicitudes -->
@@ -35,7 +38,75 @@
           <a class="btn btn-orange" [routerLink]="['sesion/sign-in']">Iniciar Sesión</a>
           <a class="btn btn-orange" [routerLink]="['sesion/sign-up']">Crear Cuenta</a>
         }
+
+        <!--Accesibilidad web-->
+        @if(routerAcc.url==='/inicio'){
+          <a class="nav-link"(click)="mostrarAccWeb()" style="font-size: 56px;" >
+            <i class="bi bi-person-wheelchair iconos"></i>
+          </a>
+        }
+        
       </div>
     </div>
   </div>
 </nav>
+
+@if(sideBar === true) {
+  <aside [ngClass]="{'offcanvas offcanvas-end show': isLargeScreen, 'modal-center': !isLargeScreen}" class="my-sidebar" tabindex="-1">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Accesibilidad Web</h5>
+    </div>
+    <hr>
+    <div class="offcanvas-body">
+      <nav>
+        <ul class="list-unstyled d-flex flex-column gap-3">
+          <!-- Controles de lectura -->
+          <li>
+            <p class="fw-bold mb-1">Controles de lectura</p>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-outline-primary btn-sm" (click)="leerPaginaCompleta('es')">📖 Leer</button>
+              <button class="btn btn-outline-primary btn-sm" (click)="pausarLectura()">⏸️</button>
+              <button class="btn btn-outline-primary btn-sm" (click)="reanudarLectura()">▶️</button>
+              <button class="btn btn-outline-primary btn-sm" (click)="detenerLectura()">⏹️</button>
+            </div>
+            <hr>
+          </li>
+
+          <!-- Tamaño de fuente -->
+          <li>
+            <p class="fw-bold mb-1">Tamaño y fuente</p>
+            <div class="d-flex flex-wrap gap-2">
+              
+              <select (change)="cambiarFuente($event)">
+                <option value="'Times New Roman',serif">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+                <option value="'Roboto',sans-serif">Roboto</option>
+                <option value="'DM Sans', sans-serif">Default</option>
+              </select>
+
+              <button class="btn btn-outline-secondary btn-sm" (click)="aumentarTexto()">A+</button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="disminuirTexto()">A−</button>
+            </div>
+            <hr>
+          </li>
+
+          
+
+          <!-- Contraste -->
+          <li>
+            <p class="fw-bold mb-1">Contraste de color</p>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-outline-secondary btn-sm"  (click)="toggleContraste()">Activar/Desactivar</button>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <hr>
+    <div class="salir">
+      <a class="btn btn-success" (click)="mostrarAccWeb()">
+        Cerrar
+      </a>
+    </div>
+  </aside>
+}
