@@ -17,6 +17,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 @Component({
@@ -32,7 +36,11 @@ import { MatButtonModule } from '@angular/material/button';
     MatSortModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    ReactiveFormsModule, // Añadir para formularios reactivos
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule   
   ],
   providers: [ SolicitudService ] // <--- AÑADE ESTA LÍNEA
 
@@ -72,7 +80,33 @@ export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy 
   isLoading = true;
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private solicitudService: SolicitudService) {}
+  editingElementId: string | null = null;
+  editForm: FormGroup | undefined;
+  
+  constructor(
+    private solicitudService: SolicitudService,
+    private fb: FormBuilder, // Inyectar FormBuilder
+    private dialog: MatDialog // Inyectar MatDialog
+  ) {
+    // Inicializar el formulario con todos los campos posibles que se pueden editar
+    this.editForm = this.fb.group({
+      // Campos de SolicitudServicio
+      nombre: [''],
+      apellidos: [''],
+      email: [''],
+      servicios: [''],
+      estado: [''],
+      urgencia: [''],
+      // Campos de SolicitudCredito
+      username: [''],
+      montoPrestamo: [''],
+      plazoMeses: [''],
+      pagoMensual: [''],
+      // 'estado' ya está definido arriba
+    });
+
+    
+  }
 
   ngOnInit(): void {
     this.cargarDatos();
@@ -112,6 +146,10 @@ export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy 
   aplicarFiltroCreditos(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourceCreditos.filter = filterValue.trim().toLowerCase();
+  }
+  
+  startEdit(element: SolicitudServicio | SolicitudCredito): void {
+    this.editingElementId = element.id!;
   }
   
   ngOnDestroy(): void {
