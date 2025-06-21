@@ -1,108 +1,77 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AccountSecurityService } from '../../core/account-security.service';
-import { AuthStateService } from '../../core/data-user/auth-state.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-unlock-account',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   template: `
-    <div class="container mt-5">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-body text-center">
-              <div class="mb-4">
-                <i class="bi bi-shield-check text-success" style="font-size: 3rem;"></i>
-              </div>
-              
-              @if (isProcessing) {
-                <h3>Procesando desbloqueo...</h3>
-                <div class="spinner-border text-primary" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-              } @else if (unlockSuccess) {
-                <h3 class="text-success">¡Cuenta Desbloqueada!</h3>
-                <p class="text-muted">Su cuenta ha sido desbloqueada exitosamente. Ahora puede iniciar sesión normalmente.</p>
-                <button class="btn btn-primary" (click)="goToLogin()">
-                  Ir a Iniciar Sesión
-                </button>
-              } @else {
-                <h3 class="text-danger">Error al Desbloquear</h3>
-                <p class="text-muted">{{errorMessage}}</p>
-                <button class="btn btn-secondary" (click)="goToLogin()">
-                  Volver al Login
-                </button>
-              }
-            </div>
-          </div>
-        </div>
+    <form #unlockForm="ngForm" (ngSubmit)="onSubmit(unlockForm)" novalidate>
+      <div>
+        <label for="email">Correo electrónico:</label>
+        <input id="email" name="email" type="email" [(ngModel)]="email" required class="form-control" />
       </div>
-    </div>
+      <div *ngIf="message" class="message">{{ message }}</div>
+      <button type="submit" class="btn btn-primary mt-2">Desbloquear cuenta</button>
+    </form>
   `,
   styles: [`
-    .card {
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      border: none;
-      border-radius: 10px;
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input.form-control {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .message {
+      margin-top: 10px;
+      color: green;
+    }
+    button.btn {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
     }
   `]
 })
-export default class UnlockAccountComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private accountSecurity = inject(AccountSecurityService);
-  private authService = inject(AuthStateService);
+export class UnlockAccountComponent {
+  email: string = '';
+  message: string = '';
 
-  isProcessing = true;
-  unlockSuccess = false;
-  errorMessage = '';
+  constructor(private http: HttpClient, private accountSecurity: AccountSecurityService) {}
 
-  async ngOnInit() {
-    const token = this.route.snapshot.queryParams['token'];
-    const email = this.route.snapshot.queryParams['email'];
-
-    if (!token || !email) {
-      this.errorMessage = 'Token o email inválido';
-      this.isProcessing = false;
+  onSubmit(form: NgForm) {
+    if (!this.email) {
+      this.message = 'Por favor ingrese un correo válido.';
       return;
     }
 
-    try {
-      // Obtener el usuario por email
-      const userProfile = await this.authService.getUserByEmail(email);
-      if (!userProfile) {
-        this.errorMessage = 'Usuario no encontrado';
-        this.isProcessing = false;
-        return;
-      }
+    // Simulate unlocking process and send email notification
+    this.accountSecurity.unlockAccount(this.email);
 
-      // Intentar desbloquear la cuenta
-      const success = await this.accountSecurity.unlockAccount(userProfile.uid, token, email);
-      
-      if (success) {
-        this.unlockSuccess = true;
-        Swal.fire({
-          title: '¡Cuenta Desbloqueada!',
-          text: 'Su cuenta ha sido desbloqueada exitosamente.',
-          icon: 'success',
-          confirmButtonText: 'Continuar'
-        });
-      } else {
-        this.errorMessage = 'Token de desbloqueo inválido o expirado';
-      }
-    } catch (error: any) {
-      console.error('Error al desbloquear cuenta:', error);
-      this.errorMessage = error.message || 'Error al procesar el desbloqueo';
-    } finally {
-      this.isProcessing = false;
-    }
-  }
+    const emailData = {
+      to: this.email,
+      subject: 'Cuenta desbloqueada',
+      text: 'Su cuenta ha sido desbloqueada. Por favor, cambie su contraseña para continuar.'
+    };
 
-  goToLogin() {
-    this.router.navigate(['/sesion/sign-in']);
+    this.http.post('http://localhost:3000/send-email', emailData).subscribe({
+      next: () => {
+        this.message = 'Se ha enviado un correo para desbloquear su cuenta.';
+      },
+      error: () => {
+        this.message = 'Error al enviar el correo de desbloqueo.';
+      }
+    });
   }
 }
