@@ -19,7 +19,6 @@ export class EmailService {
     return this.http.post(API_CONFIG.EMAIL_ENDPOINT, emailData);
   }
 
-  // Método específico para enviar correo de confirmación de financiamiento
   sendFinanciamientoConfirmation(email: string, details: any): Observable<any> {
     const emailData: EmailRequest = {
       to: email,
