@@ -58,19 +58,8 @@ export class AuthStateService {
             console.log('AuthStateService: Perfil de usuario existente cargado.', profile.email, 'Admin:', profile.isAdmin);
             console.log(this.currentUserProfile());
           } else {
-            console.warn(`AuthStateService: Usuario ${user.uid} autenticado, pero no se encontró perfil en Firestore. Creando uno básico.`);
-            const newProfile: UserProfile = {
-              uid: user.uid,
-              email: user.email,
-              fullName: user.displayName || user.email || 'Usuario Nuevo',
-              username: user.email?.split('@')[0] || 'usuario_nuevo',
-              createdAt: new Date(),
-              isAdmin: false // Por defecto, NO es admin al crear automáticamente
-            };
-            await setDoc(userDocRef, newProfile);
-            this.currentUserProfile.set(newProfile);
-            this.userEmail.set(newProfile.email);
-            console.log('AuthStateService: Perfil básico creado para nuevo usuario.', newProfile.email);
+            console.warn(`AuthStateService: Usuario ${user.uid} autenticado, pero no se encontró perfil en Firestore. `);
+
           }
         } catch (error) {
           console.error('AuthStateService: Error al cargar o crear perfil de Firestore:', error);
@@ -91,12 +80,13 @@ export class AuthStateService {
   // Método para guardar el perfil del usuario en Firestore (utilizado por el registro)
   // IMPORTANTE: Este método DEBE ser llamado desde el componente de registro
   // y SÓLO debe asignarse isAdmin: false por defecto.
-  async saveUserProfileToFirestore(user: User, fullName: string, username: string): Promise<void> {
+  async saveUserProfileToFirestore(user: User, fullName: string, fullSecondName:string , username: string): Promise<void> {
     const usersCollection = collection(this.firestore, 'users');
     const userProfile: UserProfile = {
       uid: user.uid,
       email: user.email,
       fullName: fullName,
+      fullSecondName: fullSecondName,
       username: username,
       createdAt: new Date(),
       isAdmin: false // <--- ¡Por defecto, NUNCA es admin al registrarse desde el frontend!
@@ -122,6 +112,7 @@ export class AuthStateService {
             uid: user.uid,
             email: user.email,
             fullName: fullName,
+            fullSecondName:'',
             username: username,
             createdAt: new Date(),
             isAdmin: false // <--- ¡Por defecto, NUNCA es admin al iniciar sesión con Google por primera vez!
