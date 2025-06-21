@@ -17,7 +17,23 @@ import { AuthService } from '../../core/auth.service';
 // Asegúrate de que tu componente app-google-button esté disponible o sea standalone
 import { GoogleButtonComponent } from '../ui/google-button/google-button.component';
 import { UserProfile } from '../../core/models/user-profilemodel';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+
+export const passwordsMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  // Obtenemos los dos controles de contraseña del grupo
+  const password = control.get('password');
+  const confirmPassword = control.get('passwordValidator');
+
+  // Si los controles existen y las contraseñas no coinciden,
+  // devolvemos un objeto de error.
+  if (password && confirmPassword && password.value !== confirmPassword.value) {
+    return { passwordsNotMatching: true };
+  }
+
+  // Si coinciden o los campos no existen, la validación pasa.
+  return null;
+};
 @Component({
   selector: 'app-sign-up',
   standalone: true,
@@ -25,6 +41,8 @@ import { UserProfile } from '../../core/models/user-profilemodel';
   templateUrl: './sign-up.component.html',
   // styleUrl: './sign-up.component.css' // Si no tienes un CSS específico, puedes quitar esta línea
 })
+
+
 export default class SignUpComponent {
   form: FormGroup;
 
@@ -36,12 +54,19 @@ export default class SignUpComponent {
   // private sonner = inject(SonnerService); // <--- ¡Eliminada esta línea!
   private router = inject(Router);
 
+
+
   constructor() {
     this.form = this.fb.group({
       fullName: ['', Validators.required],
+      fullSecondName:['', Validators.required],
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      passwordValidator: ['', [Validators.required, Validators.minLength(6)]],
+    }, { 
+      // Aquí aplicamos nuestro validador personalizado al grupo entero
+      validators: passwordsMatchValidator 
     });
   }
 
@@ -49,6 +74,8 @@ export default class SignUpComponent {
     const control = this.form.get(controlName);
     return (control?.hasError('required') && control?.touched) || false;
   }
+
+
 
   hasEmailError(): boolean {
     const control = this.form.get('email');
@@ -62,7 +89,7 @@ export default class SignUpComponent {
       return;
     }
 
-    const { email, password, fullName, username } = this.form.value;
+    const { email, password, fullName, fullSecondName,username } = this.form.value;
 
     try {
       const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
@@ -70,7 +97,7 @@ export default class SignUpComponent {
 
       if (user) {
         // Guardar el perfil en Firestore
-        await this.saveUserProfileToFirestore(user, fullName, username);
+        await this.saveUserProfileToFirestore(user, fullName, fullSecondName,username);
 
         toast.success('¡Cuenta creada exitosamente!', { description: 'Ahora puedes iniciar sesión.' });
         this.router.navigateByUrl('/sesion/sign-in');
@@ -105,12 +132,13 @@ export default class SignUpComponent {
   }
 
     // Método para guardar el perfil del usuario en Firestore (reutilizable)
-    private async saveUserProfileToFirestore(user: User, fullName: string, username: string): Promise<void> {
+    private async saveUserProfileToFirestore(user: User, fullName: string, fullSecondName:string ,username: string): Promise<void> {
       const usersCollection = collection(this.firestore, 'users');
       const userProfile: UserProfile = {
         uid: user.uid,
         email: user.email,
         fullName: fullName,
+        fullSecondName: fullSecondName,
         username: username,
         createdAt: new Date(),
         isAdmin: false
@@ -137,7 +165,7 @@ export default class SignUpComponent {
       const username = user.email ? user.email.split('@')[0] : 'google_user';
 
       // Guardar el perfil en Firestore
-      await this.saveUserProfileToFirestore(user, fullName, username);
+      await this.saveUserProfileToFirestore(user, fullName, '',username);
 
       toast.success('¡Sesión iniciada con Google!', { description: 'Tu perfil ha sido guardado.' });
       this.router.navigateByUrl('/inicio'); // Redirige a la página principal o donde sea apropiado
@@ -165,3 +193,4 @@ export default class SignUpComponent {
     }
   }
 }
+

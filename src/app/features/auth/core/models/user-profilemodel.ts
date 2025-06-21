@@ -7,6 +7,7 @@ export interface UserProfile {
     uid: string;
     email: string | null;
     fullName: string;
+    fullSecondName: string,
     username: string;
     createdAt: Date; // O string, si lo guardas como string en Firestore
     isAdmin: boolean;
