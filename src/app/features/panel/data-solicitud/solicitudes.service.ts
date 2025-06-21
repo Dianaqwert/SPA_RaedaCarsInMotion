@@ -12,7 +12,8 @@ import {
   CollectionReference,
   DocumentReference,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  writeBatch
 } from '@angular/fire/firestore';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AuthStateService } from '../../auth/core/data-user/auth-state.service';
@@ -35,6 +36,7 @@ export class SolicitudService {
 
   private _nombreColeccionServicio = 's-servicio';
   private _nombreColeccionCredito = 's-credito';
+  private _nombreColeccionUsuario= 'users';
   private _collectionRefServicio: CollectionReference<SolicitudServicio>;
   private _collectionRefCredito: CollectionReference<SolicitudCredito>;
 
@@ -138,6 +140,7 @@ export class SolicitudService {
 
   updateSolicitudServicio(id: string, data: Partial<SolicitudServicio>): Promise<void> {
     const docRef = doc(this._firestore, this._nombreColeccionServicio, id);
+    const docRefUsuario = doc(this._firestore, this. _nombreColeccionUsuario, id);
     toast.promise(updateDoc(docRef, data), {
       loading: 'Guardando cambios...',
       success: 'Solicitud actualizada con éxito.',
@@ -158,14 +161,32 @@ deleteSolicitudServicio(id: string): Promise<void> {
     });
   return deleteDoc(docRef);
 }
-updateSolicitudCredito(id: string, data: Partial<SolicitudCredito>): Promise<void> {
-  const docRef = doc(this._firestore, this._nombreColeccionCredito, id);
-  toast.promise(updateDoc(docRef, data), {
-      loading: 'Guardando cambios...',
-      success: 'Solicitud actualizada con éxito.',
-      error: 'Error al actualizar la solicitud.'
-    });
-  return updateDoc(docRef, data);
+
+async updateSolicitudCredito(id: string, data: Partial<SolicitudCredito>): Promise<void> {
+  const userChange = {
+    email:data.email,
+    fullName:data.fullName,
+    fullSecondName:data.fullSecondName,
+  }
+  const batch = writeBatch(this._firestore);
+
+  const solicitudRef = doc(this._firestore, this._nombreColeccionCredito, id);
+
+  if (!data.userId) {
+    throw new Error('userId is required to update user document');
+  }
+  const userRef = doc(this._firestore, 'users', data.userId as string);
+
+  batch.update(solicitudRef, data); 
+  batch.update(userRef, userChange);
+
+  // 7. Ejecutar el lote atómicamente y envolver la promesa en el toast.
+  //    batch.commit() devuelve una promesa, que es exactamente lo que toast.promise necesita.
+  await toast.promise(batch.commit(), {
+    loading: 'Guardando cambios...',
+    success: 'Solicitud y usuario actualizados con éxito.',
+    error: 'Error al actualizar los datos.'
+  });
 }
 
 deleteSolicitudCredito(id: string): Promise<void> {

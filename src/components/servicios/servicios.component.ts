@@ -65,11 +65,6 @@ export class ServiciosComponent {
       this.apellidosValidator()
     ]),
 
-    username: new FormControl('', [
-      Validators.required, 
-      Validators.minLength(5),
-      this.userValidator()
-    ]),
 
     email: new FormControl('', [Validators.required, Validators.email]),
 
@@ -183,31 +178,7 @@ export class ServiciosComponent {
     };
   }
 
-  public userValidator():ValidatorFn{
-
-    return (control: AbstractControl): ValidationErrors | null => {
-      const valor: string = control.value;
-
-      if (!valor) return null;
-
-      // Permitimos: letras con acento, mayúsculas, minúsculas y espacios
-      const regexValido = /^[a-zA-Z0-9\s_-]+$/;
-
-      if (!regexValido.test(valor)) {
-        // Extraemos los caracteres inválidos (que no están en la expresión permitida)
-        const caracteresInvalidos = valor
-          .split('')
-          .filter(char => !char.match(/[a-zA-Z0-9\s_-]/));
-
-        //quitamos duplicados para que no repita el mismo caracter varias veces
-        const unicos = [...new Set(caracteresInvalidos)];
-
-        return { caracteresInvalidos: unicos.join(', ') };
-      }
-
-      return null;
-    };
-  }
+  
 
   public cpValidator():ValidatorFn{
     //Validators.pattern('^[0-9]{5}$')

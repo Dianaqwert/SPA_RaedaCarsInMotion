@@ -1,5 +1,4 @@
-<!-- src/components/navbar/navbar/navbar.component.html -->
-<nav class="navbar navbar-expand-lg custom-navbar sticky-top p-4">
+<nav class=" navbar navbar-expand-lg custom-navbar sticky-top p-4">
   <div class="container-fluid">
     <a class="navbar-brand d-flex align-items-center gap-2" [routerLink]="['/inicio']">
       <img src="Raeda-p-removebg-preview.png" alt="Logo" width="100" height="80" class="d-inline-block">
@@ -9,15 +8,13 @@
       </div>
     </a>
     
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-      aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed"
+      aria-controls="navbarNavAltMarkup" [attr.aria-expanded]="!isMenuCollapsed">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav mx-auto">
+    <div class="m-5  collapse navbar-collapse" id="navbarNavAltMarkup" [ngbCollapse]="isMenuCollapsed">
+      <div class="navbar-nav ms-auto text-center">
         <a class="nav-link" [routerLink]="['/inicio']">Inicio</a>
         <a class="nav-link" [routerLink]="['/catalogo']">Catálogo</a>
         <a class="nav-link" [routerLink]="['/servicios']">Servicios</a>
@@ -25,8 +22,7 @@
         <a class="nav-link" [routerLink]="['/equipo']">Equipo</a>
 
         @if(authState.currentUserProfile(); as profile) {
-          <a class="btn btn-orange">Saludos! {{ profile.username }}</a>
-          <!-- Lógica condicional para Admin vs. Solicitudes -->
+          <a class="nav-link">Saludos! {{ profile.username }}</a>
           @if(profile.isAdmin) {
             <a class="btn btn-orange" [routerLink]="['/admin/panel']">Panel Admin</a>
           } @else {
@@ -38,18 +34,17 @@
           <a class="btn btn-orange" [routerLink]="['sesion/sign-in']">Iniciar Sesión</a>
           <a class="btn btn-orange" [routerLink]="['sesion/sign-up']">Crear Cuenta</a>
         }
-
-        <!--Accesibilidad web-->
-        @if(routerAcc.url==='/inicio'){
-          <a class="nav-link"(click)="mostrarAccWeb()" style="font-size: 56px;" >
-            <i class="bi bi-person-wheelchair iconos"></i>
-          </a>
-        }
-        
       </div>
     </div>
   </div>
 </nav>
+
+@if(routerAcc.url==='/inicio'){
+  <div class="floating-accessibility-btn" (click)="mostrarAccWeb()">
+    <i class="bi bi-person-wheelchair"></i>
+    <span class="accessibility-label">Accesibilidad</span>
+  </div>
+}
 
 @if(sideBar === true) {
   <aside [ngClass]="{'offcanvas offcanvas-end show': isLargeScreen, 'modal-center': !isLargeScreen}" class="my-sidebar" tabindex="-1">
@@ -60,7 +55,6 @@
     <div class="offcanvas-body">
       <nav>
         <ul class="list-unstyled d-flex flex-column gap-3">
-          <!-- Controles de lectura -->
           <li>
             <p class="fw-bold mb-1">Controles de lectura</p>
             <div class="d-flex flex-wrap gap-2">
@@ -72,7 +66,6 @@
             <hr>
           </li>
 
-          <!-- Tamaño de fuente -->
           <li>
             <p class="fw-bold mb-1">Tamaño y fuente</p>
             <div class="d-flex flex-wrap gap-2">
@@ -92,7 +85,6 @@
 
           
 
-          <!-- Contraste -->
           <li>
             <p class="fw-bold mb-1">Contraste de color</p>
             <div class="d-flex flex-wrap gap-2">

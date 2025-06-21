@@ -1,5 +1,22 @@
-mat-card-title{
+mat-card-title {
   text-align: center;
   justify-content: center;
   color: black;
+}
+
+/* Regla mejorada para que todo el texto de la tabla sea negro */
+.mat-mdc-table {
+  color: black;
+}
+
+/* Puedes usar esta regla más específica si la anterior no funciona por temas de especificidad */
+/*
+td.mat-mdc-cell, th.mat-mdc-header-cell {
+  color: black;
+}
+*/
+
+/* Clase de utilidad por si la necesitas en otros lugares */
+.texto {
+  color: black !important;
 }
