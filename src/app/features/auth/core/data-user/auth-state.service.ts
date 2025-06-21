@@ -9,7 +9,7 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword
 } from '@angular/fire/auth';
-import { Firestore, collection, doc, getDoc, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, setDoc, query, where, getDocs } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profilemodel';
@@ -151,6 +151,27 @@ export class AuthStateService {
       this.router.navigateByUrl('/inicio');
     } catch (error: any) {
       console.error('Error al cerrar sesión:', error);
+    }
+  }
+
+  async getUserByEmail(email: string): Promise<UserProfile | null> {
+    try {
+      const usersRef = collection(this.firestore, 'users');
+      const q = query(usersRef, where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        return null;
+      }
+
+      const userDoc = querySnapshot.docs[0];
+      return {
+        uid: userDoc.id,
+        ...userDoc.data()
+      } as UserProfile;
+    } catch (error) {
+      console.error('Error getting user by email:', error);
+      return null;
     }
   }
 }
