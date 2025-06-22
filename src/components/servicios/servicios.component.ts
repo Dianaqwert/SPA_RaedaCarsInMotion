@@ -335,7 +335,6 @@ export class ServiciosComponent {
         }).then(async (result) => {
           if (result.isConfirmed) {
             // Acción si confirma
-            this.loading=true;
 
             try{
               await this.request.createSolicitudServicio(nuevoReg);
@@ -344,8 +343,6 @@ export class ServiciosComponent {
               this.form.reset(); // Limpia el formulario después de un envío exitoso
             } catch (error){
                 Swal.fire('Error', 'Ocurrio un error al guardar la información', 'error');
-            }finally{
-              this.loading=false;
             }
           }else{
             Swal.fire('Error, información no guardada');

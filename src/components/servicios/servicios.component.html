@@ -96,70 +96,63 @@
 <!-- formulario reactivo -->
 <div class="row g-5">
 
-    <!-- <div class="col-md-5 col-lg-4 order-md-last"> 
+    <div class="col-md-5 col-lg-4 order-md-last"> 
         <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-primary">Tu solicitud de servicio</span> 
+            <span class="text-success">Tu solicitud de servicio</span> 
         </h4> 
-        @if(ultimoRegistro) {
-            <ul class="list-group mb-3">
-                <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
-                    <div class="text-success">
-                        <h6 class="my-0">ID de registro</h6>
-                        <small>{{ ultimoRegistro.id }}</small>
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                    <div>
-                        <h6 class="my-0">Nombre completo</h6>
-                        <small class="text-body-secondary">{{ ultimoRegistro.nombre }} {{ ultimoRegistro.apellidos }}</small>
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                    <div>
-                        <h6 class="my-0">Email</h6>
-                        <small class="text-body-secondary">{{ ultimoRegistro.email }}</small>
-                    </div>
-                </li>
+
+        <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                <div class="text-success">
+                    <h6 class="my-0">Nombre: {{ form.get('nombre')?.value }} {{form.get('apellidos')?.value}}</h6>
+                       
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                <div class="text-success">
+                    <h6 class="my-0">Email: {{ form.get('email')?.value }}</h6>
+                       
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                <div class="text-success">
+                    <h6 class="my-0">Dirección: {{ form.get('direccion')?.value }}</h6>
+                </div>
+            </li>
+            
+            <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                <div class="text-success">
+                    <h6 class="my-0">Estado: {{ form.get('estado')?.value }}</h6>
+                </div>
+            </li>
+                 
+            <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                <div class="text-success">
+                    <h6 class="my-0">CP: {{ form.get('cp')?.value }}</h6>
+                </div>
+            </li>
                 
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                    <div>
-                        <h6 class="my-0">Ubicación</h6>
-                        <small class="text-body-secondary">
-                            {{ ultimoRegistro.direccion }}, 
-                            {{ ultimoRegistro.estado }}, 
-                            {{ ultimoRegistro.pais }}
-                        </small>
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                    <div>
-                        <h6 class="my-0">Fecha de cita</h6>
-                        <small class="text-body-secondary">{{ ultimoRegistro.fechaCita | date:'longDate' }}</small>
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                    <div>
-                        <h6 class="my-0">Urgencia</h6>
-                        <small class="text-body-secondary">
-                        {{ ultimoRegistro.urgencia | titlecase }}
-                        </small>
-                    </div>
-                </li>
-                <li class="list-group-item d-flex justify-content-between lh-sm">
-                    <div>
-                        <h6 class="my-0">Tipo de servicio</h6>
-                        <small class="text-body-secondary">
-                        {{ ultimoRegistro.servicios | titlecase }}
-                        </small>
-                    </div>
-                </li>
-            </ul>
-        } @else {
-            <div class="alert alert-info">
-                No hay registros guardados aún
-            </div>
-        }
-    </div> -->
+            <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                <div class="text-success">
+                    <h6 class="my-0">Servicio: {{ form.get('servicios')?.value }}</h6>
+                </div>
+            </li>
+                
+            <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                <div class="text-success">
+                    <h6 class="my-0">Urgencia: {{ form.get('urgencia')?.value | titlecase }}</h6>
+                </div>
+            </li>
+                
+            <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+                <div class="text-success">
+                    <h6 class="my-0">Fecha de cita: {{ form.get('fechaCita')?.value | date:'fullDate' }}</h6>
+                </div>
+            </li>
+        </ul>
+
+
+    </div>
     
     <!--FORMUALRIO REACTIVO-->
     <div class="col-md-7 col-lg-8">
@@ -563,7 +556,7 @@
                     <div class="invalid-feedback">Security code required</div> 
                 </div> 
             </div>
-            
+
             <hr class="my-4">
 
             <!--radio buton-->
@@ -608,12 +601,6 @@
                 Guardar información
             </button>
 
-            @if(loading){
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Cargando ...</span>
-                </div>
-            }
-            
         </form>
 
 
