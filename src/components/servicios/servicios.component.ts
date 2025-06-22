@@ -180,7 +180,6 @@ export class ServiciosComponent {
   }
 
 
-
   public cpValidator():ValidatorFn{
     //Validators.pattern('^[0-9]{5}$')
     return (control: AbstractControl): ValidationErrors | null => {
@@ -295,6 +294,9 @@ export class ServiciosComponent {
     }
   }
 
+  //loading
+  loading=false;
+
   //guardar local
   async guardarInformacion(){    
       // Obtener registros existentes o crear array nuevo
@@ -333,11 +335,17 @@ export class ServiciosComponent {
         }).then(async (result) => {
           if (result.isConfirmed) {
             // Acción si confirma
+            this.loading=true;
+
             try{
               await this.request.createSolicitudServicio(nuevoReg);
+              //loading
+              Swal.fire('Capturado', 'Tu información ha sido guardada.', 'success');
               this.form.reset(); // Limpia el formulario después de un envío exitoso
-            } catch {
-                Swal.fire('Capturando', 'Tu información ha sido guardada.', 'success');
+            } catch (error){
+                Swal.fire('Error', 'Ocurrio un error al guardar la información', 'error');
+            }finally{
+              this.loading=false;
             }
           }else{
             Swal.fire('Error, información no guardada');

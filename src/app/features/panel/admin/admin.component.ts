@@ -21,6 +21,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @Component({
@@ -40,16 +42,19 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule, // Añadir para formularios reactivos
     MatDialogModule,
     MatFormFieldModule,
-    MatInputModule   
+    MatInputModule,
+    MatSelectModule,
   ],
   providers: [ SolicitudService ] // <--- AÑADE ESTA LÍNEA
 
 })
 export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  displayedColumnsServicios: string[] = [
+  statusOptions: string[] = ['Pendiente', 'Aprobado', 'Rechazado'];
+  urgenciaOptions: string[] = ['Baja', 'Media', 'Alta']; // O las opciones que necesites
+
+  displayedColumnsServicios: string[] =  [
     'fechaDeRegistro',
-    'nombreCompleto', // Crearemos esta columna combinando nombre y apellidos
     'email',
     'servicios',
     'fechaCita',
@@ -63,7 +68,8 @@ export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy 
   // Columnas alineadas con el modelo SolicitudCredito
   displayedColumnsCreditos: string[] = [
     'fecha',
-    'username',
+    'fullName',
+    'fullSecondName',
     'montoPrestamo',
     'plazoMeses',
     'pagoMensual',
@@ -81,7 +87,7 @@ export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy 
   private subscriptions: Subscription = new Subscription();
 
   editingElementId: string | null = null;
-  editForm: FormGroup | undefined;
+  editForm: FormGroup;
   
   constructor(
     private solicitudService: SolicitudService,
@@ -91,13 +97,16 @@ export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy 
     // Inicializar el formulario con todos los campos posibles que se pueden editar
     this.editForm = this.fb.group({
       // Campos de SolicitudServicio
-      nombre: [''],
-      apellidos: [''],
+      id:[''],
+      fullName: [''],
+      fullSecondName: [''],
       email: [''],
       servicios: [''],
       estado: [''],
       urgencia: [''],
+      userId:[''],
       // Campos de SolicitudCredito
+      fecha: [''],
       username: [''],
       montoPrestamo: [''],
       plazoMeses: [''],
@@ -150,6 +159,52 @@ export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy 
   
   startEdit(element: SolicitudServicio | SolicitudCredito): void {
     this.editingElementId = element.id!;
+    this.editForm.reset(); // Limpia el formulario antes de poblarlo
+    // Rellena el formulario con los datos del elemento a editar
+    this.editForm.patchValue(element);
+  }
+
+  cancelEdit(): void {
+    this.editingElementId = null;
+    // No es necesario restaurar datos manualmente. Al cancelar,
+    // simplemente dejamos de mostrar los inputs y la tabla
+    // volverá a renderizar los datos originales del dataSource.
+  }
+
+  saveEdit(type: 'servicio' | 'credito'): void {
+    if (!this.editForm.valid || !this.editingElementId) {
+      return;
+    }
+    const id = this.editingElementId;
+    const updatedData = this.editForm.value;
+
+    let promise: Promise<void>;
+
+    if (type === 'servicio') {
+      promise = this.solicitudService.updateSolicitudServicio(id, updatedData);
+    } else {
+      promise = this.solicitudService.updateSolicitudCredito(id, updatedData);
+    }
+    
+    promise.then(() => {
+      this.cancelEdit();
+      // Opcional: para ver el cambio inmediatamente sin recargar todo.
+      // this.cargarDatos(); 
+    });
+  }
+
+  deleteElement(id: string, type: 'servicio' | 'credito'): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) { // El usuario hizo clic en "Eliminar"
+        if (type === 'servicio') {
+          this.solicitudService.deleteSolicitudServicio(id);
+        } else {
+          this.solicitudService.deleteSolicitudCredito(id);
+        }
+      }
+    });
   }
   
   ngOnDestroy(): void {

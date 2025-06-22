@@ -2,10 +2,6 @@
   <div class="container py-4">
     <div class="row justify-content-center">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-        <a href="#" class="d-flex align-items-center justify-content-center mb-4 text-dark text-decoration-none">
-          <img class="me-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" style="width: 32px; height: 32px;" />
-          <span class="fs-4 fw-semibold">Flowbite</span>
-        </a>
         <div class="card shadow rounded-3">
           <div class="card-body p-4 p-md-5">
             <div class="d-flex flex-column align-items-center mb-4">
@@ -16,7 +12,7 @@
             <form [formGroup]="form" (ngSubmit)="submit()">
               <!-- Campo: Nombre Completo -->
               <div class="mb-3">
-                <label for="fullName" class="form-label text-dark fw-medium">Nombre Completo</label>
+                <label for="fullName" class="form-label text-dark fw-medium">Nombre o Nombres Completos</label>
                 <input
                   type="text"
                   name="fullName"
@@ -26,6 +22,21 @@
                   formControlName="fullName"
                 />
                 @if(isRequired('fullName')) {
+                <small class="text-danger mt-1 d-block">Este campo es requerido</small>
+                }
+              </div>
+
+              <div class="mb-3">
+                <label for="fullSecondName" class="form-label text-dark fw-medium">Apellidos Completos</label>
+                <input
+                  type="text"
+                  name="fullSecondName"
+                  id="fullSecondName"
+                  class="form-control rounded-3"
+                  placeholder="Tu nombre completo"
+                  formControlName="fullSecondName"
+                />
+                @if(isRequired('fullSecondName')) {
                 <small class="text-danger mt-1 d-block">Este campo es requerido</small>
                 }
               </div>
@@ -68,17 +79,34 @@
               <div class="mb-3">
                 <label for="password" class="form-label text-dark fw-medium">Contraseña</label>
                 <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="••••••••"
-                  formControlName="password"
-                  class="form-control rounded-3"
+                    type="password"
+                    id="password"
+                    placeholder="••••••••"
+                    formControlName="password"
+                    class="form-control rounded-3"
                 />
-                @if(isRequired('password')) {
-                <small class="text-danger mt-1 d-block">Este campo es requerido</small>
+                @if (form.get('password')?.invalid && form.get('password')?.touched) {
+                    <small class="text-danger mt-1 d-block">La contraseña debe tener al menos 6 caracteres.</small>
                 }
-              </div>
+            </div>
+                  <!-- Campo: Contraseña (existente) -->
+              <div class="mb-3">
+                <label for="passwordValidator" class="form-label text-dark fw-medium">Confirmar Contraseña</label>
+                <input
+                    type="password"
+                    id="passwordValidator"
+                    placeholder="••••••••"
+                    formControlName="passwordValidator"
+                    class="form-control rounded-3"
+                />
+                @if (form.get('passwordValidator')?.invalid && form.get('passwordValidator')?.touched && !form.hasError('passwordsNotMatching')) {
+                    <small class="text-danger mt-1 d-block">Este campo es requerido.</small>
+                }
+            
+                @if (form.hasError('passwordsNotMatching') && form.get('passwordValidator')?.touched) {
+                    <small class="text-danger mt-1 d-block">Las contraseñas no coinciden.</small>
+                }
+            </div>
 
               <button
                 type="submit"

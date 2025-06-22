@@ -21,6 +21,7 @@ import { v4 as uuidv4 } from 'uuid'; // <--- ¡Importa la función para generar 
 
 import { AuthStateService } from '../../../app/features/auth/core/data-user/auth-state.service';
 import { SolicitudService } from '../../../app/features/panel/data-solicitud/solicitudes.service';
+import { FullscreenOverlayContainer } from '@angular/cdk/overlay';
 @Pipe({
   name: 'youtubeEmbed',
 })
@@ -85,7 +86,7 @@ export class FinanciamientoComponent implements OnInit {
   solicitudes: any[] = [];
   private user = inject(AuthStateService);
   private router = inject(Router);
-  private username = this.user.currentUserProfile()?.username || "";
+  private usuarioActivo = this.user.currentUserProfile();
   private request = inject(SolicitudService);
 
 
@@ -201,14 +202,16 @@ export class FinanciamientoComponent implements OnInit {
       // lo que implica que SÍ hay un usuario logueado.
   
       const nuevaSolicitud = {
-        id: uuidv4(), // Esto es un ID de cliente, Firestore generará su propio ID de documento.
-        username: this.username,
+        id: uuidv4(),
+        username: this.usuarioActivo?.username ?? '',
+        fullName: this.usuarioActivo?.fullName ?? '',
+        fullSecondName: this.usuarioActivo?.fullSecondName ?? '',
+        email: this.usuarioActivo?.email ?? '',
         montoPrestamo: this.montoPrestamo.toString(),
         plazoMeses: this.plazoMeses?.toString() || '',
         pagoMensual: this.pagoMensual.toString(),
         fecha: new Date().toLocaleString(),
         estado: 'pendiente'
-        // El 'userId' se agrega en SolicitudService, ¡NO lo agregues aquí también!
       };
   
       Swal.fire({
