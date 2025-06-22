@@ -1,5 +1,3 @@
-// src/components/navbar/navbar/navbar.component.ts
-
 import { Component, inject } from '@angular/core';
 import { RouterModule, Router, NavigationEnd } from '@angular/router'; // Asegúrate que Router es de @angular/router
 import { AsyncPipe } from '@angular/common'; // Si usaras el async pipe para otras cosas, mantenlo

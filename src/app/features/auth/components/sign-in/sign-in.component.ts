@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { CaptchaComponent } from '../../../../shared/captcha/captcha.component';
 
 @Component({
@@ -11,23 +12,22 @@ import { CaptchaComponent } from '../../../../shared/captcha/captcha.component';
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css']
 })
-export class SignInComponent {
+export default class SignInComponent {
   email: string = '';
   password: string = '';
   captchaValid: boolean = false;
   loginError: string = '';
   @Output() loginSuccess = new EventEmitter<void>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   onCaptchaValidated(valid: boolean) {
     this.captchaValid = valid;
   }
 
   validatePassword(password: string): boolean {
-    // Password validation: min 8 chars, at least one uppercase, one lowercase, one number
-    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$/;
-    return pattern.test(password);
+    const correctPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    return correctPattern.test(password);
   }
 
   onSubmit(form: NgForm) {
@@ -40,7 +40,6 @@ export class SignInComponent {
       this.loginError = 'La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas y números.';
       return;
     }
-    // Call the email API to send a login notification email
     const emailData = {
       to: this.email,
       subject: 'Login Notification',
@@ -49,6 +48,7 @@ export class SignInComponent {
     this.http.post('http://localhost:3000/send-email', emailData).subscribe({
       next: () => {
         this.loginSuccess.emit();
+        this.router.navigate(['/admin/panel']);
       },
       error: () => {
         this.loginError = 'Error al enviar el correo de notificación.';

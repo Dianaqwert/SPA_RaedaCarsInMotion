@@ -1,4 +1,3 @@
-// src/app/features/auth/components/sign-up/sign-up.component.ts
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,11 +9,10 @@ import {
   User                  // Importar el tipo User de Firebase
 } from '@angular/fire/auth';
 import { Firestore, collection, doc, setDoc } from '@angular/fire/firestore';
-import { toast } from 'ngx-sonner'; // <--- ¡Cambiado aquí! Importa 'toast' directamente
+import { toast } from 'ngx-sonner';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 
-// Asegúrate de que tu componente app-google-button esté disponible o sea standalone
 import { GoogleButtonComponent } from '../ui/google-button/google-button.component';
 import { UserProfile } from '../../core/models/user-profilemodel';
 
@@ -23,7 +21,7 @@ import { UserProfile } from '../../core/models/user-profilemodel';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, GoogleButtonComponent],
   templateUrl: './sign-up.component.html',
-  // styleUrl: './sign-up.component.css' // Si no tienes un CSS específico, puedes quitar esta línea
+  styleUrl: './sign-up.component.css'
 })
 export default class SignUpComponent {
   form: FormGroup;

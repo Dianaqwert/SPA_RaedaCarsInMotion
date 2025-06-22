@@ -1,3 +1,4 @@
+
 import { Routes } from '@angular/router';
 import { InicioComponent } from '../components/inicio/inicio.component';
 import { EquipoComponent } from '../components/equipo/equipo/equipo.component';
@@ -6,11 +7,12 @@ import { FinanciamientoComponent } from '../components/financiamiento/financiami
 import { CatalogoComponent } from '../components/catalogo/catalogo/catalogo.component';
 import { DetalleAutoComponent } from '../components/detalle-auto/detalle-auto.component';
 import { adminGuard } from './features/auth/guards/admin.guard';
+import authRoutes from './features/auth/auth.routes';
 
 export const routes: Routes = [
   {
     path: 'sesion',
-    loadChildren: () => import('./features/auth/auth.routes'),
+    children: authRoutes
   },
   {
     path: 'admin/panel',
@@ -55,3 +57,4 @@ export const routes: Routes = [
     redirectTo: 'inicio'
   }
 ];
+
