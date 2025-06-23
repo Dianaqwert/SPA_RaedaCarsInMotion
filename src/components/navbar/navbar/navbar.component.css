@@ -1,195 +1,265 @@
+
 * {
-    font-size: var(--tamano-texto, 20px);
-    font-family: var(--fuente-principal, "DM Sans"), sans-serif;
-  }
+  font-size: var(--tamano-texto, 20px);
+  font-family: var(--fuente-principal, "DM Sans"), sans-serif;
+}
+
+
+
+.custom-navbar {
+    background-color: #FFFFFF;
+    color: #050003;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-toggler{
+    color: #050003;
+}
+
+/* color de las líneas del botón (hamburguesa) */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23FFA739' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
   
-  .custom-navbar {
-      background-color: #FFFFFF;
-      color: #050003;
-      padding: 0 20px;
-  }
+/* estilo base */
+.navbar-brand {
+    color: #050003;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    margin-right: 5rem;
+}
   
-  .navbar-toggler{
-      color: #050003;
-      border: none; /* Se quita el borde por defecto */
-  }
+/* al pasar el mouse */
+.navbar-brand:hover {
+    color: #FFA739; /* Un tono diferente, como rosa brillante */
+}
   
-  .navbar-toggler:focus {
-      box-shadow: none; /* Se quita el resplandor azul al hacer clic */
-  }
+
+/* color por defecto de los enlaces */
+.navbar-nav .nav-link {
+    color: #050003;
+    transition: color 0.3s ease;
+    text-align: center;
+}
   
-  /* color de las líneas del botón (hamburguesa) */
-  .navbar-toggler-icon {
-      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23FFA739' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-  }
+/* al pasar el mouse */
+.navbar-nav .nav-link:hover {
+    color: #FFA739;  /* Rosa más brillante o diferente */
+}
+  
+/* al hacer clic o enfocar */
+.navbar-nav .nav-link:focus,
+.navbar-nav .nav-link:active {
+    color: #FFA739; /* Otro tono si lo deseas */
+}
+
+nav{
+    font-family: "Montserrat", sans-serif;
+}
+
+a{
+    cursor: pointer;
+}
+
+.btn-orange {
+    background-color: #FFA739;
+    color: #050003;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 500;
+    text-decoration: none; /* para quitar subrayado si lo hubiera */
+    font-size: 1rem;
+    text-align: center;
+}
+
+.btn-orange:hover,
+.btn-orange:focus,
+.btn-orange:active {
+    background-color: #1d1c1c; /* tono más oscuro */
+    color: #FFFFFF;
+}
+
+/* Centrar elementos del navbar */
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.navbar-collapse {
+    justify-content: center;
+}
+.custom-navbar {
+    background-color: #FFFFFF;
+    color: #050003;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px; /* Añadir padding lateral */
+}
+
+.container-fluid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+}
+
+.navbar-collapse {
+    justify-content: center;
+    flex-grow: 0; /* Evitar que ocupe espacio adicional */
+}
+
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    gap: 1.5rem; /* Espacio entre elementos */
+}
+
+/* Ajustar posición del botón toggler */
+.navbar-toggler {
+    position: absolute;
+    right: 2rem;
+}
+
+@media (max-width: 991.98px) {
+    .container-fluid {
+        justify-content: center;
+        padding: 0 1rem;
+    }
     
-  /* estilo base */
-  .navbar-brand {
-      color: #050003;
-      text-decoration: none;
-      transition: color 0.3s ease;
-      display: flex;
-      align-items: center;
-  }
+    .navbar-toggler {
+        position: static;
+        margin-left: auto;
+    }
     
-  /* al pasar el mouse */
-  .navbar-brand:hover {
-      color: #FFA739;
-  }
+    .navbar-collapse {
+        width: 100%;
+    }
     
-  /* color por defecto de los enlaces */
-  .navbar-nav .nav-link {
-      color: #050003;
-      transition: color 0.3s ease;
-      text-align: center;
-      padding: 0.5rem 1rem; /* Padding consistente */
-  }
+    .navbar-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
     
-  /* al pasar el mouse */
-  .navbar-nav .nav-link:hover {
-      color: #FFA739;
-  }
-    
-  /* al hacer clic o enfocar */
-  .navbar-nav .nav-link:focus,
-  .navbar-nav .nav-link:active {
-      color: #FFA739;
-  }
-  
-  nav{
-      font-family: "Montserrat", sans-serif;
-  }
-  
-  a{
-      cursor: pointer;
-  }
-  
-  .btn-orange {
-      background-color: #FFA739;
-      color: #050003;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      font-weight: 500;
-      text-decoration: none;
-      font-size: 1rem;
-      text-align: center;
-  }
-  
-  .btn-orange:hover,
-  .btn-orange:focus,
-  .btn-orange:active {
-      background-color: #1d1c1c;
-      color: #FFFFFF;
-  }
-  
-  /* Contenedor principal */
-  .container-fluid {
-      width: 100%;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 1rem; /* Un padding más estándar */
-  }
-  
-  /* --- Botón flotante de accesibilidad --- */
-  /* Esta sección es clave para que siempre se mantenga visible */
-  .floating-accessibility-btn {
-      position: fixed; /* Esto es lo más importante */
-      bottom: 2rem;
-      right: 2rem;
-      background-color: #FFA739;
-      color: #050003;
-      border: none;
-      border-radius: 50px;
-      padding: 1rem 1.5rem;
-      cursor: pointer;
-      z-index: 1050; /* Z-index alto para que esté sobre otros elementos */
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.1rem;
-      font-weight: 500;
-  }
-  
-  .floating-accessibility-btn:hover {
-      background-color: #1d1c1c;
-      color: #FFFFFF;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .floating-accessibility-btn i {
-      font-size: 1.5rem;
-  }
-  
-  .accessibility-label {
-      font-size: 0.9rem;
-  }
-  
-  /* --- Media Queries para Responsividad --- */
-  
-  /* Estilos para cuando la barra de navegación está colapsada (pantallas de menos de 992px) */
-  @media (max-width: 991.98px) {
-      .navbar-nav {
-          align-items: center; /* Centra los items verticalmente */
-          padding-top: 1rem; /* Espacio superior cuando el menú se abre */
-      }
-  
-      .navbar-nav .nav-link,
-      .navbar-nav .btn-orange {
-          width: 100%; /* Ocupa todo el ancho */
-          margin-bottom: 0.5rem; /* Espacio entre botones */
-      }
-  
-      .navbar-nav .btn-orange {
-          margin-top: 0.5rem; /* Espacio ligero arriba del primer botón */
-      }
-  }
-  
-  
-  /* Ajustes para el botón de accesibilidad en pantallas más pequeñas */
-  @media (max-width: 768px) {
-      .floating-accessibility-btn {
-          bottom: 1rem;
-          right: 1rem;
-          padding: 0.8rem;
-      }
-      
-      .accessibility-label {
-          display: none; /* Ocultar texto en móviles para ahorrar espacio */
-      }
-      
-      .floating-accessibility-btn i {
-          font-size: 1.3rem;
-          margin: 0;
-      }
-  }
-  
-  /* --- Estilos del Sidebar de Accesibilidad (se mantienen igual) --- */
-  
-  .my-sidebar.offcanvas {
-    width: 300px;
-  }
-  
-  .modal-center {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 90vw;
-    max-width: 400px;
-    transform: translate(-50%, -50%);
-    z-index: 1055;
-    background-color: white;
+    .btn-orange {
+        margin-top: 1rem;
+    }
+}
+
+/*Accesibilidad web*/
+
+@media (max-width: 767.98px) {
+  .my-sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+    background-color: #fff;
     padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: block;
+    margin-top: 1rem;
+    text-align: center;
   }
-  
-  .salir{
-      display:grid;
-      align-items: center;
-      padding: 10px;
+
+
+  .my-sidebar .close-btn {
+    display: none; /* ya no se necesita cerrar en versión móvil */
   }
+}
+
+
+/* Estilo para pantallas grandes (conserva offcanvas) */
+.my-sidebar.offcanvas {
+  width: 300px;
+}
+
+
+/* Estilo para pantallas pequeñas: centro tipo modal */
+.modal-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 90vw;
+  max-width: 400px;
+  transform: translate(-50%, -50%);
+  z-index: 1055;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.d-flex{
+    text-align: center;
+    align-items: center;
+}
+
+.AccWrb{
+    display: flex;
+}
+
+.btn-accesible {
+  padding: 0.5rem 1rem;
+  background-color: #cee0f2;
+  color: #212529;
+  border: 2px solid #212529;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-accesible:hover,
+.btn-accesible:focus {
+  background-color: #212529;
+  color: #fff;
+  outline: none;
+}
+
+.accesibilidad-list {
+  padding-left: 0;
+}
+
+.accesibilidad-item {
+  flex-wrap: wrap;
+}
+
+.visually-hidden {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.salir{
+    display:grid;
+    align-items: center;
+    padding: 10px;
+}
+
+.iconos{
+    font-size: 2.5rem;
+}
+
+.offcanvas-header{
+    align-items: center;
+    text-align: center;
+}
+
+
