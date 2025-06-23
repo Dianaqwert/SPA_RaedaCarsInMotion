@@ -11,7 +11,7 @@ import { CaptchaComponent } from '../../../../shared/captcha/captcha.component';
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css']
 })
-export class SignInComponent {
+export default class SignInComponent {
   email: string = '';
   password: string = '';
   captchaValid: boolean = false;
