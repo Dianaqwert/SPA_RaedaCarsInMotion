@@ -1,90 +1,89 @@
 <section class="bg-light vh-100 d-flex align-items-center justify-content-center">
-    <div class="container py-4">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-  
-          <div class="card shadow rounded-3">
-            <div class="card-body p-4 p-md-5">
-              <div class="d-flex flex-column align-items-center mb-4 text-center">
-                <h1 class="h3 fw-bold text-dark mb-2">Establecer Nueva Contraseña</h1>
-                <p class="text-secondary fw-light">
-                  Crea una nueva contraseña segura para tu cuenta: {{ userEmail }}
-                </p>
-              </div>
-  
-              <form [formGroup]="changePasswordForm" (ngSubmit)="submit()" novalidate>
-                
-                <!-- Campo: Nueva Contraseña -->
-                <div class="mb-3">
-                  <label for="newPassword" class="form-label text-dark fw-medium">Nueva Contraseña</label>
-                  <input
-                    type="password"
-                    id="newPassword"
-                    class="form-control rounded-3"
-                    placeholder="••••••••"
-                    formControlName="newPassword"
-                  />
-                </div>
-  
-                <!-- Campo: Confirmar Contraseña -->
-                <div class="mb-3">
-                  <label for="confirmPassword" class="form-label text-dark fw-medium">Confirmar Nueva Contraseña</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    class="form-control rounded-3"
-                    placeholder="••••••••"
-                    formControlName="confirmPassword"
-                  />
-                  <!-- Error si las contraseñas no coinciden -->
-                  @if (changePasswordForm.hasError('passwordsNotMatching') && changePasswordForm.get('confirmPassword')?.touched) {
-                    <small class="text-danger mt-1 d-block">Las contraseñas no coinciden.</small>
-                  }
-                </div>
-  
-                <!-- Validador de Fortaleza de Contraseña -->
-                @if (passwordValidationResult && changePasswordForm.get('newPassword')?.touched) {
-                  <div class="mt-3">
-                    <div class="progress" style="height: 5px;">
-                      <div 
-                        class="progress-bar" 
-                        role="progressbar" 
-                        [style.width]="passwordValidationResult.strength === 'weak' ? '33%' : passwordValidationResult.strength === 'medium' ? '66%' : '100%'" 
-                        [style.backgroundColor]="passwordValidatorService.getPasswordStrengthColor(passwordValidationResult.strength)">
-                      </div>
-                    </div>
-                    <p class="mt-2" [style.color]="passwordValidatorService.getPasswordStrengthColor(passwordValidationResult.strength)">
-                      Fortaleza: {{ passwordValidatorService.getPasswordStrengthText(passwordValidationResult.strength) }}
-                    </p>
-                    @if (!passwordValidationResult.isValid) {
-                      <ul class="list-unstyled text-danger small">
-                        @for (error of passwordValidationResult.errors; track error) {
-                          <li>• {{ error }}</li>
-                        }
-                      </ul>
-                    }
-                  </div>
-                }
-  
-                <!-- Botón de Submit -->
-                <button
-                  type="submit"
-                  class="btn btn-primary w-100 fw-medium rounded-3 py-2 mt-4"
-                  [disabled]="isLoading || changePasswordForm.invalid || !passwordValidationResult?.isValid"
-                >
-                  @if (isLoading) {
-                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                    <span role="status"> Cambiando...</span>
-                  } @else {
-                    <span>Cambiar Contraseña</span>
-                  }
-                </button>
-  
-              </form>
+  <div class="container py-4">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+
+        <div class="card shadow rounded-3">
+          <div class="card-body p-4 p-md-5">
+            <div class="d-flex flex-column align-items-center mb-4 text-center">
+              <h1 class="h3 fw-bold text-dark mb-2">Establecer Nueva Contraseña</h1>
+              <p class="text-secondary fw-light">
+                Crea una nueva contraseña segura para tu cuenta: {{ userEmail }}
+              </p>
             </div>
+
+            <form [formGroup]="changePasswordForm" (ngSubmit)="submit()" novalidate>
+              
+              <!-- Campo: Nueva Contraseña -->
+              <div class="mb-3">
+                <label for="newPassword" class="form-label text-dark fw-medium">Nueva Contraseña</label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  class="form-control rounded-3"
+                  placeholder="••••••••"
+                  formControlName="newPassword"
+                />
+              </div>
+
+              <!-- Campo: Confirmar Contraseña -->
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label text-dark fw-medium">Confirmar Nueva Contraseña</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  class="form-control rounded-3"
+                  placeholder="••••••••"
+                  formControlName="confirmPassword"
+                />
+                <!-- Error si las contraseñas no coinciden -->
+                @if (changePasswordForm.hasError('passwordsNotMatching') && changePasswordForm.get('confirmPassword')?.touched) {
+                  <small class="text-danger mt-1 d-block">Las contraseñas no coinciden.</small>
+                }
+              </div>
+
+              <!-- Validador de Fortaleza de Contraseña -->
+              @if (passwordValidationResult && changePasswordForm.get('newPassword')?.touched) {
+                <div class="mt-3">
+                  <div class="progress" style="height: 5px;">
+                    <div 
+                      class="progress-bar" 
+                      role="progressbar" 
+                      [style.width]="passwordValidationResult.strength === 'weak' ? '33%' : passwordValidationResult.strength === 'medium' ? '66%' : '100%'" 
+                      [style.backgroundColor]="passwordValidatorService.getPasswordStrengthColor(passwordValidationResult.strength)">
+                    </div>
+                  </div>
+                  <p class="mt-2" [style.color]="passwordValidatorService.getPasswordStrengthColor(passwordValidationResult.strength)">
+                    Fortaleza: {{ passwordValidatorService.getPasswordStrengthText(passwordValidationResult.strength) }}
+                  </p>
+                  @if (!passwordValidationResult.isValid) {
+                    <ul class="list-unstyled text-danger small">
+                      @for (error of passwordValidationResult.errors; track error) {
+                        <li>• {{ error }}</li>
+                      }
+                    </ul>
+                  }
+                </div>
+              }
+
+              <!-- Botón de Submit -->
+              <button
+                type="submit"
+                class="btn btn-primary w-100 fw-medium rounded-3 py-2 mt-4"
+                [disabled]="isLoading || changePasswordForm.invalid || !passwordValidationResult?.isValid"
+              >
+                @if (isLoading) {
+                  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                  <span role="status"> Cambiando...</span>
+                } @else {
+                  <span>Cambiar Contraseña</span>
+                }
+              </button>
+
+            </form>
           </div>
         </div>
       </div>
     </div>
-  </section>
-  
+  </div>
+</section>

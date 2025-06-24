@@ -62,6 +62,7 @@ export const routes: Routes = [
     path: 'cambiar-contrasena/:email', 
     loadComponent: () => import('./features/auth/components/cambiar-contrasena/cambiar-contrasena.component').then(m => m.default)
   },
+  
   {
     path: '**',
     redirectTo: 'inicio'
