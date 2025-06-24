@@ -139,6 +139,8 @@ export class AuthStateService {
   async resetPasswordAndUnlock(email: string, newPassword: string): Promise<any> {
     // Este endpoint debe ser creado en tu servidor de Express.
     const apiUrl = 'https://backendapi-raeda.onrender.com/cambiar-contrasena';
+    console.log(email);
+    console.log(newPassword);
     return firstValueFrom(this.http.post(apiUrl, { email, newPassword }));
   }
   
