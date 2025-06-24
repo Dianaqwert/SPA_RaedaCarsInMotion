@@ -57,21 +57,40 @@ export default class SignInComponent {
       return;
     }
     if (!this.captchaValid) {
-      toast.error('Captcha no resuelto', { description: 'Por favor, completa el captcha para continuar.' });
+      toast.error('Captcha no resuelto', { description: 'Por favor, completa el captcha.' });
       return;
     }
 
     const { email, password } = this.form.value;
     if (!email || !password) return;
 
+    // --- NUEVA VERIFICACIÓN ---
+    // 1. Buscamos el perfil del usuario ANTES de intentar el inicio de sesión.
+    try {
+      const userProfile = await this._authService.getUserByEmail(email);
+
+      // 2. Si el perfil existe y está marcado como bloqueado, detenemos el proceso aquí.
+      if (userProfile?.blocked) {
+        toast.error('Cuenta Bloqueada', {
+          description: 'Esta cuenta ha sido bloqueada. Por favor, recupera tu contraseña.',
+        });
+        return; // Detiene la ejecución de la función.
+      }
+    } catch (error) {
+        // Si hay un error buscando al usuario (ej. reglas de seguridad), lo mostramos.
+        console.error("Error al verificar el estado de la cuenta:", error);
+        toast.error('Error de Verificación', { description: 'No se pudo verificar el estado de la cuenta.' });
+        return;
+    }
+    
+    // 3. Si la cuenta no está bloqueada, procedemos con el intento de inicio de sesión.
     try {
       await this._authService.signIn({ email, password });
-      // Si el login es exitoso, reseteamos el contador de intentos para ese email.
-      this.loginAttempts.delete(email);
+      this.loginAttempts.delete(email); // Limpia los intentos si el login es exitoso
       toast.success('¡Hola nuevamente!');
       this._router.navigateByUrl('/tasks');
     } catch (error) {
-      // Si falla, delegamos el manejo del error a una función específica.
+      // Si falla el login (contraseña incorrecta), manejamos el contador de intentos.
       this.handleLoginError(error, email);
     }
   }
@@ -82,51 +101,44 @@ export default class SignInComponent {
    * @param email - El email con el que se intentó iniciar sesión.
    */
   private async handleLoginError(error: any, email: string) {
-    const errorCode = error.code;
-
-    // Caso 1: La cuenta ya está bloqueada (error personalizado de nuestro servicio).
-    if (errorCode === 'auth/account-blocked') {
+    // Si la cuenta ya está bloqueada, muestra un mensaje y no hagas nada más.
+    if (error.code === 'auth/account-blocked') {
       toast.error('Cuenta Bloqueada', {
-        description: 'Esta cuenta ha sido bloqueada. Por favor, recupera tu contraseña para desbloquearla.',
+        description: 'Recupera tu contraseña para desbloquearla.',
       });
       return;
     }
 
-    // Caso 2: Credenciales inválidas (contraseña incorrecta o usuario no existe).
-    // Firebase v9+ usa 'auth/invalid-credential' para ambos casos.
-    if (errorCode === 'auth/invalid-credential') {
+    // Si las credenciales son incorrectas, cuenta el intento.
+    if (error.code === 'auth/invalid-credential') {
       const attempts = (this.loginAttempts.get(email) || 0) + 1;
       this.loginAttempts.set(email, attempts);
       const remainingAttempts = this.MAX_ATTEMPTS - attempts;
 
       if (remainingAttempts > 0) {
         toast.warning('Credenciales Incorrectas', {
-          description: `Te quedan ${remainingAttempts} intentos antes de que se bloquee la cuenta.`,
+          description: `Te quedan ${remainingAttempts} intentos.`,
         });
       } else {
-        // Se alcanzó el límite de intentos, procedemos a bloquear.
+        // Si se acabaron los intentos, bloquea la cuenta.
         toast.info('Bloqueando cuenta por seguridad...');
         try {
-          const userToBlock = await this._authService.getUserByEmail(email);
-          if (userToBlock?.uid) {
-            await this._authService.blockUser(userToBlock.uid);
-            toast.error('Cuenta Bloqueada', {
-              description: 'Has superado el número de intentos. Tu cuenta ha sido bloqueada.',
-            });
-            this.loginAttempts.delete(email); // Limpiamos el contador una vez bloqueado.
-          } else {
-            // Si el usuario no existe en nuestra DB, simplemente mostramos el error de credenciales.
-            toast.error('Credenciales Incorrectas', { description: 'El correo o la contraseña son incorrectos.' });
-          }
+          // *** ESTA ES LA LÍNEA CORREGIDA ***
+          // Ahora llamamos a blockUser pasando la variable 'email', que es lo que la función espera.
+          await this._authService.blockUser(email);
+          
+          toast.error('Cuenta Bloqueada', {
+            description: 'Has superado el número de intentos. Tu cuenta ha sido bloqueada.',
+          });
+          this.loginAttempts.delete(email);
         } catch (blockError) {
           console.error("Error al intentar bloquear la cuenta:", blockError);
-          toast.error('Error en el Servidor', { description: 'No se pudo procesar el bloqueo de la cuenta.' });
+          toast.error('Error en el Servidor', { description: 'No se pudo procesar el bloqueo.' });
         }
       }
     } else {
-      // Caso 3: Otros errores inesperados.
-      console.error("Error desconocido en signIn: ", error);
-      toast.error('Error al iniciar sesión', { description: 'Ocurrió un error inesperado.' });
+      // Manejo de otros errores inesperados de Firebase.
+      toast.error('Error Inesperado', { description: 'Ocurrió un error al iniciar sesión.' });
     }
   }
 

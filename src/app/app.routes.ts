@@ -51,6 +51,11 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    // Añadimos '/:email' para indicarle a Angular que esta ruta aceptará un parámetro llamado 'email'
+    path: 'cambiar-contrasena/:email', 
+    loadComponent: () => import('./features/auth/components/cambiar-contrasena/cambiar-contrasena.component').then(m => m.default)
+  },
+  {
     path: '**',
     redirectTo: 'inicio'
   }

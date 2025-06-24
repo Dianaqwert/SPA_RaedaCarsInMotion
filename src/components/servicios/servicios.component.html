@@ -511,13 +511,25 @@
             <hr class="my-4">
             <!--urgencia del servicio-->
             <h4 class="mb-3">Pago(paypal)</h4>
-            <div class="my-3 d-flex gap-3">
-                <button type="button" class="btn btn-outline-primary" [class.active]="form.value.paymentMethod === 'credit'" (click)="selectPaymentMethod('credit')">Credit card</button>
-                <button type="button" class="btn btn-outline-primary" [class.active]="form.value.paymentMethod === 'debit'" (click)="selectPaymentMethod('debit')">Debit card</button>
-                <button type="button" class="btn btn-outline-primary" [class.active]="form.value.paymentMethod === 'paypal'" (click)="selectPaymentMethod('paypal')">PayPal</button>
+            <div class="my-3">
+                <div class="form-check">
+                    <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
+                    <label class="form-check-label" for="credit">Credit card</label>
+                </div>
+                
+                <div class="form-check">
+                    <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required="">
+                    <label class="form-check-label" for="debit">Debit card</label>
+                </div>
+                
+                <div class="form-check">
+                    <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required=""> 
+                    <label class="form-check-label" for="paypal">PayPal</label> 
+                </div> 
+            
             </div>
             
-            <div class="row gy-3" *ngIf="form.value.paymentMethod !== 'paypal'">
+            <div class="row gy-3">
                 <div class="col-md-6">
                     <label for="cc-name" class="form-label">Name on card</label>
                     <input type="text" class="form-control" id="cc-name" placeholder="" required=""> 
@@ -570,11 +582,8 @@
 
 
             </div>
-            
-            <hr class="my-4">
 
-            <!-- PayPal Buttons container -->
-            <div *ngIf="form.value.paymentMethod === 'paypal'" id="paypal-button-container"></div>
+            <hr class="my-4">
 
             <!-- Botón de Validar -->
             <button class="w-100 btn btn-primary btn-lg" 
@@ -593,7 +602,6 @@
             </button>
 
         </form>
-
 
 
     </div>

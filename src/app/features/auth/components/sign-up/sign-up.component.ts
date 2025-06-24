@@ -141,6 +141,7 @@ export default class SignUpComponent {
         fullSecondName: fullSecondName,
         username: username,
         createdAt: new Date(),
+        blocked:false,
         isAdmin: false
         // Puedes añadir photoURL: user.photoURL si lo deseas en tu UserProfile model
       };

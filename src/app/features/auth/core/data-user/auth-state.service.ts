@@ -105,6 +105,7 @@ export class AuthStateService {
       fullSecondName: fullSecondName,
       username: username,
       createdAt: new Date(),
+      blocked:false,
       isAdmin: false // <--- ¡Por defecto, NUNCA es admin al registrarse desde el frontend!
     };
     await setDoc(doc(usersCollection, user.uid), userProfile);
@@ -115,16 +116,22 @@ export class AuthStateService {
    * Actualiza el perfil de un usuario en Firestore para marcarlo como bloqueado.
    * @param uid - El ID del usuario a bloquear.
    */
-  async blockUser(uid: string): Promise<void> {
+  async blockUser(email: string): Promise<void> {
     try {
-      const userDocRef = doc(this.firestore, 'users', uid);
-      await updateDoc(userDocRef, { blocked: true });
-      console.log(`Usuario ${uid} ha sido bloqueado.`);
+      const user = await this.getUserByEmail(email);
+      if (user?.uid) {
+        const userDocRef = doc(this.firestore, 'users', user.uid);
+        await updateDoc(userDocRef, { blocked: true });
+        console.log(`Petición de bloqueo enviada para el usuario ${user.uid}`);
+      } else {
+        console.log(`Intento de bloqueo para email no encontrado: ${email}`);
+      }
     } catch (error) {
-      console.error('Error al bloquear al usuario:', error);
-      throw error; // Re-lanzar para que el componente sepa que falló.
+      console.error('Error al bloquear al usuario desde el cliente:', error);
+      throw new Error('No se pudo completar la solicitud de bloqueo.');
     }
   }
+
 
   // --- NUEVO MÉTODO: unblockUser ---
   /**
@@ -165,6 +172,7 @@ export class AuthStateService {
             fullSecondName:'',
             username: username,
             createdAt: new Date(),
+            blocked: false,
             isAdmin: false // <--- ¡Por defecto, NUNCA es admin al iniciar sesión con Google por primera vez!
           };
           await setDoc(userDocRef, newUserProfile);
