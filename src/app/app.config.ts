@@ -57,7 +57,10 @@ export const appConfig: ApplicationConfig = {
       NgxUiLoaderHttpModule.forRoot({
         showForeground: true // Muestra el spinner de primer plano para todas las solicitudes HTTP
       })
-    )
+    ), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          })
 
           
   ],
