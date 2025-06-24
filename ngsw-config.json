@@ -31,7 +31,15 @@
   "dataGroups": [
     {
       "name":"api",
-      "urls": [],
+      "urls": ["https://spaautos10.free.beeceptor.com/todos",
+               "https://backendapi-raeda.onrender.com/paypal",
+               "https://backendapi-raeda.onrender.com/api/montos",
+               "https://backendapi-raeda.onrender.com/api/informacionQR/**",
+               "https://raedacars.free.beeceptor.com/send-email",
+               "https://backendapi-raeda.onrender.com/send-recovery-email",
+               "https://backendapi-raeda.onrender.com/cambiar-contrasena"
+               
+      ],
       "cacheConfig":{
         "strategy":"freshness",
         "maxSize":20,
