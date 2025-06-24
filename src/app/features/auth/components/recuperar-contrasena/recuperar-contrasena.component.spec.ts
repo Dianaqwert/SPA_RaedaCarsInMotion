@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RecuperarContrasenaComponent } from './recuperar-contrasena.component';
+import  RecuperarContrasenaComponent  from './recuperar-contrasena.component';
 
 describe('RecuperarContrasenaComponent', () => {
   let component: RecuperarContrasenaComponent;

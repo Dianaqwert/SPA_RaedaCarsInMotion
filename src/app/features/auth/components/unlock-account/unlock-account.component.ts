@@ -65,7 +65,7 @@ export class UnlockAccountComponent {
       text: 'Su cuenta ha sido desbloqueada. Por favor, cambie su contraseña para continuar.'
     };
 
-    this.http.post('http://localhost:3000/send-email', emailData).subscribe({
+    this.http.post('https://backendapi-raeda.onrender.com/send-email', emailData).subscribe({
       next: () => {
         this.message = 'Se ha enviado un correo para desbloquear su cuenta.';
       },

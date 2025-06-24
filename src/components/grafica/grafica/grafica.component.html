@@ -1,0 +1,79 @@
+<!-- src/app/components/your-chart-component/your-chart-component.html -->
+<div class="container py-4 bg-light rounded shadow-lg">
+  <h2 class="text-center mb-4">Análisis Estadístico de Montos Solicitados</h2>
+
+  <!-- Contenedor principal para la disposición en dos columnas o una, dependiendo del tamaño de pantalla -->
+  <div class="row g-4">
+    <!-- Columna 1: Panel de Estadísticas Clave y Botones -->
+    @if(calculatedStats) {
+      <div class="col-12 col-md-6">
+        <div class="card p-4 rounded shadow-sm border h-100 d-flex flex-column">
+          <h3 class="card-title text-center mb-4 text-secondary">Estadísticas Clave de Montos:</h3>
+          <div class="row g-3 text-center mb-4">
+            <div class="col-12 col-md-4">
+              <div class="bg-info-subtle p-3 rounded">
+                <p class="fw-bold text-info mb-1">Moda (Monto más frecuente):</p>
+                <p class="fs-5 fw-bold text-info-emphasis">
+                  {{ calculatedStats.mode.length ? (calculatedStats.mode.length > 1 ? calculatedStats.mode.join(', ') : calculatedStats.mode[0]) : 'N/A' }} MXN
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="bg-success-subtle p-3 rounded">
+                <p class="fw-bold text-success mb-1">Media (Promedio):</p>
+                <p class="fs-5 fw-bold text-success-emphasis">
+                  {{ calculatedStats.mean !== undefined ? calculatedStats.mean.toFixed(2) : 'N/A' }} MXN
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-md-4">
+              <div class="bg-warning-subtle p-3 rounded">
+                <p class="fw-bold text-warning mb-1">Mediana:</p>
+                <p class="fs-5 fw-bold text-warning-emphasis">
+                  {{ calculatedStats.median !== undefined ? calculatedStats.median.toFixed(2) : 'N/A' }} MXN
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botones de la gráfica dentro de la primera columna -->
+          <div class="d-flex flex-wrap justify-content-center gap-3 mt-auto">
+            <button (click)="generarGrafica('frequency-bar')"
+                    class="btn btn-primary btn-lg flex-grow-1 shadow-sm">
+              Frecuencia de Montos (Moda)
+            </button>
+            <button (click)="generarGrafica('histogram')"
+                    class="btn btn-success btn-lg flex-grow-1 shadow-sm">
+              Histograma de Distribución
+            </button>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <!-- Mensaje si no hay estadísticas, se extiende a ambas columnas -->
+      <div class="col-12 d-flex justify-content-center align-items-center bg-white rounded shadow-sm" style="min-height: 400px;">
+        <div class="alert alert-info text-center w-75 m-auto" role="alert">
+          Por el momento no hay estadísticas que mostrar. Asegúrate de que tu API esté funcionando y devuelva datos.
+        </div>
+      </div>
+    }
+
+    <!-- Columna 2: Gráfica -->
+    <div class="col-12 col-md-6">
+       @if(mensajeDataNA){
+        <div class="card p-3 rounded shadow-sm bg-white" style="height: 500px;">
+          <div class="d-flex justify-content-center mt-4">
+            <div class="alert alert-danger text-center w-75" role="alert">
+              <p class="fs-5 fw-bold mb-0">{{ mensajeError }}</p>
+            </div>
+          </div>
+        </div>
+       }@else {
+        <div class="card p-3 rounded shadow-sm bg-white" style="height: 500px;">
+          <canvas id="graficoMontos"></canvas>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+

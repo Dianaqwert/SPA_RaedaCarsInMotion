@@ -4,8 +4,14 @@ import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideServiceWorker } from '@angular/service-worker';
+
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule, SPINNER, POSITION, PB_DIRECTION } from 'ngx-ui-loader';
+import { ApiInterceptorService } from '../inter/api.interceptor.service';
+import { importProvidersFrom } from '@angular/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,9 +32,36 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    provideHttpClient(), provideServiceWorker('ngsw-worker.js', {
+    provideHttpClient(withInterceptorsFromDi()), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          }),
+          provideAnimations(),
+          {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiInterceptorService,
+      multi: true // Permite múltiples interceptores
+    },
+
+    // Importa NgxUiLoaderModule y NgxUiLoaderHttpModule como proveedores a nivel de la aplicación
+    importProvidersFrom(
+      NgxUiLoaderModule.forRoot({
+        fgsType: SPINNER.fadingCircle, // Tipo de spinner
+        fgsColor: '#4CAF50', // Color del spinner
+        pbDirection: PB_DIRECTION.leftToRight, // Dirección de la barra de progreso
+        pbColor: '#2196F3', // Color de la barra de progreso
+        text: 'Cargando datos...', // Texto por defecto
+        textColor: '#FFFFFF', // Color del texto
+        bgsOpacity: 0.8, // Opacidad del fondo
+      }),
+      NgxUiLoaderHttpModule.forRoot({
+        showForeground: true // Muestra el spinner de primer plano para todas las solicitudes HTTP
+      })
+    ), provideServiceWorker('ngsw-worker.js', {
             enabled: !isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
           })
+
+          
   ],
 };

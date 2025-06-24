@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CambiarContrasenaComponent } from './cambiar-contrasena.component';
+import  CambiarContrasenaComponent from './cambiar-contrasena.component';
 
 describe('CambiarContrasenaComponent', () => {
   let component: CambiarContrasenaComponent;

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import SolicitudesComponent from './solicitudes.component';
+import { QrOfertaComponent } from './qr-oferta.component';
 
-describe('SolicitudesComponent', () => {
-  let component: SolicitudesComponent;
-  let fixture: ComponentFixture<SolicitudesComponent>;
+describe('QrOfertaComponent', () => {
+  let component: QrOfertaComponent;
+  let fixture: ComponentFixture<QrOfertaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SolicitudesComponent]
+      imports: [QrOfertaComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SolicitudesComponent);
+    fixture = TestBed.createComponent(QrOfertaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

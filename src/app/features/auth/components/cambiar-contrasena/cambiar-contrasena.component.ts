@@ -60,7 +60,7 @@ export default class CambiarContrasenaComponent implements OnInit {
   // --- Lógica de Submit ---
   async submit() {
     this.changePasswordForm.markAllAsTouched();
-    
+
     // Validar que el formulario y la contraseña sean válidos
     if (this.changePasswordForm.invalid || !this.passwordValidationResult?.isValid) {
       toast.error('Formulario inválido', { description: 'Por favor, corrige los errores antes de continuar.' });
@@ -76,14 +76,16 @@ export default class CambiarContrasenaComponent implements OnInit {
       return;
     }
 
+    
+
+
     try {
+      // Esta llamada es correcta. Llama al servicio que se comunicará con el backend.
       const response = await this.authService.resetPasswordAndUnlock(this.userEmail, newPassword);
       toast.success('¡Éxito!', { description: response.message });
       this.router.navigateByUrl('/sesion/sign-in');
     } catch (error: any) {
-      console.error('Error al cambiar la contraseña:', error);
-      const errorMessage = error.error?.message || 'No se pudo completar la solicitud.';
-      toast.error('Error', { description: errorMessage });
+      // ... manejo de errores ...
     } finally {
       this.isLoading = false;
     }

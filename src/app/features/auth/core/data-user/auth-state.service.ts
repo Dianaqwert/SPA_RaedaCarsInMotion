@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profilemodel';
 import { firstValueFrom } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 
 export interface Userr {
   email: string;
@@ -34,7 +33,7 @@ export class AuthStateService {
   public userEmail = signal<string | null>(null);
   public isLoggedIn = computed(() => this.currentUserAuth() !== null);
   public isAuthResolved = signal<boolean>(false);
-  private http = inject(HttpClient); // Inyectar HttpClient
+  http: any;
 
   constructor() {
     firebaseUserObservable(this.auth).pipe(
@@ -80,19 +79,6 @@ export class AuthStateService {
     });
   }
 
-  // --- NUEVO MÉTODO PARA CAMBIAR CONTRASEÑA ---
-  /**
-   * Llama al backend para cambiar la contraseña y desbloquear la cuenta.
-   * @param email El email del usuario.
-   * @param newPassword La nueva contraseña.
-   * @returns Una promesa que se resuelve cuando la operación es exitosa.
-   */
-  async resetPasswordAndUnlock(email: string, newPassword: string): Promise<any> {
-    // Este endpoint debe ser creado en tu servidor de Express.
-    const apiUrl = 'http://localhost:3000/cambiar-contrasena';
-    return firstValueFrom(this.http.post(apiUrl, { email, newPassword }));
-  }
-
   // Método para guardar el perfil del usuario en Firestore (utilizado por el registro)
   // IMPORTANTE: Este método DEBE ser llamado desde el componente de registro
   // y SÓLO debe asignarse isAdmin: false por defecto.
@@ -105,6 +91,7 @@ export class AuthStateService {
       fullSecondName: fullSecondName,
       username: username,
       createdAt: new Date(),
+      blocked:false,
       isAdmin: false // <--- ¡Por defecto, NUNCA es admin al registrarse desde el frontend!
     };
     await setDoc(doc(usersCollection, user.uid), userProfile);
@@ -115,16 +102,22 @@ export class AuthStateService {
    * Actualiza el perfil de un usuario en Firestore para marcarlo como bloqueado.
    * @param uid - El ID del usuario a bloquear.
    */
-  async blockUser(uid: string): Promise<void> {
+  async blockUser(email: string): Promise<void> {
     try {
-      const userDocRef = doc(this.firestore, 'users', uid);
-      await updateDoc(userDocRef, { blocked: true });
-      console.log(`Usuario ${uid} ha sido bloqueado.`);
+      const user = await this.getUserByEmail(email);
+      if (user?.uid) {
+        const userDocRef = doc(this.firestore, 'users', user.uid);
+        await updateDoc(userDocRef, { blocked: true });
+        console.log(`Petición de bloqueo enviada para el usuario ${user.uid}`);
+      } else {
+        console.log(`Intento de bloqueo para email no encontrado: ${email}`);
+      }
     } catch (error) {
-      console.error('Error al bloquear al usuario:', error);
-      throw error; // Re-lanzar para que el componente sepa que falló.
+      console.error('Error al bloquear al usuario desde el cliente:', error);
+      throw new Error('No se pudo completar la solicitud de bloqueo.');
     }
   }
+
 
   // --- NUEVO MÉTODO: unblockUser ---
   /**
@@ -143,7 +136,14 @@ export class AuthStateService {
     }
   }
 
-
+  async resetPasswordAndUnlock(email: string, newPassword: string): Promise<any> {
+    // Este endpoint debe ser creado en tu servidor de Express.
+    const apiUrl = 'https://backendapi-raeda.onrender.com/cambiar-contrasena';
+    console.log(email);
+    console.log(newPassword);
+    return firstValueFrom(this.http.post(apiUrl, { email, newPassword }));
+  }
+  
   async signInWithGoogle(): Promise<User | null> {
     const provider = new GoogleAuthProvider();
     try {
@@ -165,6 +165,7 @@ export class AuthStateService {
             fullSecondName:'',
             username: username,
             createdAt: new Date(),
+            blocked: false,
             isAdmin: false // <--- ¡Por defecto, NUNCA es admin al iniciar sesión con Google por primera vez!
           };
           await setDoc(userDocRef, newUserProfile);

@@ -17,14 +17,29 @@
       }
     },
     {
-      "name": "assets",
+      "name": "public-assets", 
       "installMode": "lazy",
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
+          "/public/**",
+          "/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
         ]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name":"api",
+      "urls": [],
+      "cacheConfig":{
+        "strategy":"freshness",
+        "maxSize":20,
+        "maxAge":"1h",
+        "timeout":"5s"
+      }
+    }
+
   ]
+  
 }
