@@ -3,18 +3,20 @@ import { Component, inject, input } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthStateService } from '../../app/features/auth/core/data-user/auth-state.service';
 import { Router } from '@angular/router';
-import { AsyncPipe } from '@angular/common'; // Si usaras el async pipe para otras cosas, mantenlo
+import { AsyncPipe } from '@angular/common'; 
 import { toast } from 'ngx-sonner';
-import Swal from 'sweetalert2'; // <--- ¡Importa SweetAlert2 aquí!
+import Swal from 'sweetalert2'; 
 import { SolicitudService } from '../../app/features/panel/data-solicitud/solicitudes.service';
-import { v4 as uuidv4 } from 'uuid'; // <--- ¡Importa la función para generar UUIDs!
-
+import { v4 as uuidv4 } from 'uuid';
+import { GraficaComponent } from "../grafica/grafica/grafica.component"; 
 // Import PaypalService for payment integration
 import { PaypalService } from '../../services/paypal.service';
+import { QrOfertaComponent } from '../qr-generator/qr-oferta/qr-oferta.component';
+
 
 @Component({
   selector: 'app-servicios',
-  imports: [FormsModule,ReactiveFormsModule,CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule,QrOfertaComponent],
   providers: [SolicitudService],
   templateUrl: './servicios.component.html',
   styleUrl: './servicios.component.css'
@@ -373,7 +375,7 @@ export class ServiciosComponent {
       }
     }
     
-    if(this.form.valid) {
+     if(this.form.valid) {
       this.formValidated = true;
 
       // --- START: PayPal payment flow integration ---
@@ -423,10 +425,10 @@ export class ServiciosComponent {
       this.form.markAllAsTouched();
       this.formValidated = false;
     }
+  
+
   }
 
-  //loading
-  loading=false;
 
   //guardar local
   async guardarInformacion(){    
@@ -485,4 +487,8 @@ export class ServiciosComponent {
     const datos = localStorage.getItem('registroFormulario');
     return datos ? JSON.parse(datos) : [];
   }
+
+
+
 }
+

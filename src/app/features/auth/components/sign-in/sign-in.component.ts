@@ -10,11 +10,12 @@ import { Router, RouterLink } from '@angular/router';
 import { toast } from 'ngx-sonner';
 
 // --- Imports de la lógica de negocio y componentes UI ---
-import { AuthStateService } from '../../../auth/core/data-user/auth-state.service';
-import { isRequired, hasEmailError } from '../../core/utils/validators';
+import { AuthStateService } from '../../../auth/core/data-user/auth-state.service'; // Asegúrate de que la ruta sea correcta
+import { isRequired, hasEmailError } from '../../core/utils/validators'; // Asumo que estos helpers existen
 import { GoogleButtonComponent } from '../ui/google-button/google-button.component';
-import { CaptchaComponent } from '../../../../shared/captcha/captcha.component';
+import { CaptchaComponent } from '../../../../shared/captcha/captcha.component'; // Asegúrate de que la ruta sea correcta
 
+// --- Interfaces para claridad en el tipado ---
 export interface FormSignIn {
   email: FormControl<string | null>;
   password: FormControl<string | null>;
@@ -24,11 +25,11 @@ export interface FormSignIn {
   selector: 'app-sign-in',
   standalone: true,
   imports: [
-    CommonModule,
+    CommonModule, // Necesario para directivas como @if
     ReactiveFormsModule,
     RouterLink,
     GoogleButtonComponent,
-    CaptchaComponent,
+    CaptchaComponent, // Importamos el componente del captcha
   ],
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css']
@@ -41,56 +42,48 @@ export default class SignInComponent {
 
   // --- Estado del componente ---
   public captchaValid: boolean = false;
-  // Nuevo: Mapa para almacenar los intentos de inicio de sesión por email.
+  // Propiedades que faltaban para el contador de intentos
   private loginAttempts = new Map<string, number>();
   private readonly MAX_ATTEMPTS = 3;
 
+  // --- Formulario Reactivo ---
   form = this._formBuilder.group<FormSignIn>({
     email: this._formBuilder.control('', [Validators.required, Validators.email]),
     password: this._formBuilder.control('', Validators.required),
   });
 
-  // --- Lógica de Submit (actualizada) ---
+  // --- Lógica de Submit (Reestructurada y Corregida) ---
   async submit() {
-    if (this.form.invalid) {
+    // 1. Validaciones iniciales del formulario y captcha
+    if (this.form.invalid || !this.captchaValid) {
       this.form.markAllAsTouched();
-      return;
-    }
-    if (!this.captchaValid) {
-      toast.error('Captcha no resuelto', { description: 'Por favor, completa el captcha.' });
+      if (!this.captchaValid) {
+        toast.error('Captcha no resuelto', { description: 'Por favor, completa el captcha.' });
+      }
       return;
     }
 
     const { email, password } = this.form.value;
     if (!email || !password) return;
 
-    // --- NUEVA VERIFICACIÓN ---
-    // 1. Buscamos el perfil del usuario ANTES de intentar el inicio de sesión.
     try {
+      // 2. Verificación previa para saber si la cuenta ya está bloqueada
       const userProfile = await this._authService.getUserByEmail(email);
-
-      // 2. Si el perfil existe y está marcado como bloqueado, detenemos el proceso aquí.
       if (userProfile?.blocked) {
         toast.error('Cuenta Bloqueada', {
           description: 'Esta cuenta ha sido bloqueada. Por favor, recupera tu contraseña.',
         });
-        return; // Detiene la ejecución de la función.
+        return; // Detiene la ejecución si ya está bloqueada
       }
-    } catch (error) {
-        // Si hay un error buscando al usuario (ej. reglas de seguridad), lo mostramos.
-        console.error("Error al verificar el estado de la cuenta:", error);
-        toast.error('Error de Verificación', { description: 'No se pudo verificar el estado de la cuenta.' });
-        return;
-    }
-    
-    // 3. Si la cuenta no está bloqueada, procedemos con el intento de inicio de sesión.
-    try {
+
+      // 3. Si no está bloqueada, intentar el inicio de sesión
       await this._authService.signIn({ email, password });
-      this.loginAttempts.delete(email); // Limpia los intentos si el login es exitoso
+      this.loginAttempts.delete(email); // Éxito: limpiar contador de intentos
       toast.success('¡Hola nuevamente!');
       this._router.navigateByUrl('/tasks');
+
     } catch (error) {
-      // Si falla el login (contraseña incorrecta), manejamos el contador de intentos.
+      // 4. Si cualquier paso anterior falla, delegar al manejador de errores
       this.handleLoginError(error, email);
     }
   }
@@ -101,15 +94,7 @@ export default class SignInComponent {
    * @param email - El email con el que se intentó iniciar sesión.
    */
   private async handleLoginError(error: any, email: string) {
-    // Si la cuenta ya está bloqueada, muestra un mensaje y no hagas nada más.
-    if (error.code === 'auth/account-blocked') {
-      toast.error('Cuenta Bloqueada', {
-        description: 'Recupera tu contraseña para desbloquearla.',
-      });
-      return;
-    }
-
-    // Si las credenciales son incorrectas, cuenta el intento.
+    // Caso de error: Credenciales inválidas (contraseña incorrecta)
     if (error.code === 'auth/invalid-credential') {
       const attempts = (this.loginAttempts.get(email) || 0) + 1;
       this.loginAttempts.set(email, attempts);
@@ -120,40 +105,40 @@ export default class SignInComponent {
           description: `Te quedan ${remainingAttempts} intentos.`,
         });
       } else {
-        // Si se acabaron los intentos, bloquea la cuenta.
         toast.info('Bloqueando cuenta por seguridad...');
         try {
-          // *** ESTA ES LA LÍNEA CORREGIDA ***
-          // Ahora llamamos a blockUser pasando la variable 'email', que es lo que la función espera.
+          // Llamamos a la función para bloquear la cuenta pasándole el email
           await this._authService.blockUser(email);
-          
           toast.error('Cuenta Bloqueada', {
             description: 'Has superado el número de intentos. Tu cuenta ha sido bloqueada.',
           });
-          this.loginAttempts.delete(email);
+          this.loginAttempts.delete(email); // Limpiamos el contador una vez bloqueada
         } catch (blockError) {
           console.error("Error al intentar bloquear la cuenta:", blockError);
           toast.error('Error en el Servidor', { description: 'No se pudo procesar el bloqueo.' });
         }
       }
-    } else {
-      // Manejo de otros errores inesperados de Firebase.
-      toast.error('Error Inesperado', { description: 'Ocurrió un error al iniciar sesión.' });
+    } else if (error.code !== 'auth/account-blocked') {
+        // Manejo de otros errores inesperados que no sean 'cuenta bloqueada'
+        console.error("Error desconocido en el proceso de inicio de sesión:", error);
+        toast.error('Error Inesperado', { description: 'Ocurrió un error al intentar iniciar sesión.' });
     }
   }
 
-  // --- (resto de tus métodos y validadores) ---
+  // --- Lógica de Submit con Google (sin captcha) ---
+  async submitWithGoogle() {
+    try {
+      await this._authService.signInWithGoogle();
+      toast.success('¡Bienvenido de nuevo!');
+      this._router.navigateByUrl('/tasks');
+    } catch (error) {
+      console.error("Error en signInWithGoogle: ", error);
+      toast.error('Ocurrió un error', { description: 'No se pudo iniciar sesión con Google.' });
+    }
+  }
+
+  // --- Métodos de validación para la plantilla ---
   isRequired(field: 'email' | 'password') { return isRequired(field, this.form); }
   hasEmailError() { return hasEmailError(this.form); }
   onCaptchaValidated(valid: boolean) { this.captchaValid = valid; }
-  async submitWithGoogle() {
-      try {
-        await this._authService.signInWithGoogle();
-        toast.success('¡Bienvenido de nuevo!');
-        this._router.navigateByUrl('/tasks');
-      } catch (error) {
-        console.error("Error en signInWithGoogle: ", error);
-        toast.error('Ocurrió un error', { description: 'No se pudo iniciar sesión con Google.' });
-      }
-    }
 }

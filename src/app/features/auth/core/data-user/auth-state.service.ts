@@ -13,8 +13,6 @@ import { Firestore, collection, doc, getDoc, setDoc, query, where, getDocs, upda
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profilemodel';
-import { firstValueFrom } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 
 export interface Userr {
   email: string;
@@ -34,7 +32,6 @@ export class AuthStateService {
   public userEmail = signal<string | null>(null);
   public isLoggedIn = computed(() => this.currentUserAuth() !== null);
   public isAuthResolved = signal<boolean>(false);
-  private http = inject(HttpClient); // Inyectar HttpClient
 
   constructor() {
     firebaseUserObservable(this.auth).pipe(
@@ -78,19 +75,6 @@ export class AuthStateService {
       console.log('AuthStateService: Autenticación resuelta. Estado final:', user ? user.email : 'Sin usuario');
     
     });
-  }
-
-  // --- NUEVO MÉTODO PARA CAMBIAR CONTRASEÑA ---
-  /**
-   * Llama al backend para cambiar la contraseña y desbloquear la cuenta.
-   * @param email El email del usuario.
-   * @param newPassword La nueva contraseña.
-   * @returns Una promesa que se resuelve cuando la operación es exitosa.
-   */
-  async resetPasswordAndUnlock(email: string, newPassword: string): Promise<any> {
-    // Este endpoint debe ser creado en tu servidor de Express.
-    const apiUrl = 'http://localhost:3000/cambiar-contrasena';
-    return firstValueFrom(this.http.post(apiUrl, { email, newPassword }));
   }
 
   // Método para guardar el perfil del usuario en Firestore (utilizado por el registro)

@@ -97,6 +97,12 @@
 <div class="row g-5">
 
     <div class="col-md-5 col-lg-4 order-md-last"> 
+        <!--QR-->
+        <div>
+            <app-qr-oferta></app-qr-oferta> 
+        </div>
+
+        <hr>
         <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-success">Tu solicitud de servicio</span> 
         </h4> 
@@ -151,6 +157,7 @@
             </li>
         </ul>
 
+      
 
     </div>
     
@@ -249,51 +256,6 @@
                     }
                 </div>
 
-                <!--User-->
-                <!-- <div class="col-12">
-                    <label for="username" class="form-label">Nombre de usuario</label>
-                    <div class="input-group has-validation">
-                        <span class="input-group-text"></span>
-                        <input type="text" class="form-control" id="username" placeholder="Nombre de usuario no debe de tener caracteres como */?|+- , unicamente números y giones bajos y medios" formControlName="username">
-                        @if(form.get('username')?.invalid && form.get('username')?.touched){
-                            @if(form.get('username')?.hasError('required')){
-                                <div class="invalid-feedback">
-                                    Introduzca su nombre de usuario.
-                                </div>
-                            }
-
-                            <div  class="invalid-feedback"
-                                [ngClass]="{
-                                    'd-block': form.get('username')?.hasError('minlength') && form.get('username')?.touched,
-                                    'd-none': !(form.get('username')?.hasError('minlength') && form.get('username')?.touched)
-                                }">
-                                La dirección debe tener al menos 5 caracteres.
-                            </div>
-
-                            <div class="invalid-feedback"
-                                [ngClass]="{
-                                    'd-block': form.get('username')?.hasError('maxlength') && form.get('username')?.touched,
-                                    'd-none': !(form.get('username')?.hasError('maxlength') && form.get('username')?.touched)
-                                }">
-                                La dirección no debe tener más de 30 caracteres.
-                            </div>
-
-                            @if(form.get('username')?.hasError('caracteresInvalidos')){
-                                <div class="invalid-feedback d-block">
-                                    La dirección contiene caracteres inválidos: 
-                                    {{ form.get('username')?.getError('caracteresInvalidos') }}
-                                </div>
-                            }
-                        } @else if(form.get('username')?.valid && form.get('username')?.touched){
-                            <div class="valid-feedback">
-                                Dirección válida
-                            </div>
-                        }
-
-                    </div>
-                </div>
-                <!-jñnl--->
-                <!--mail-->
                 <div class="col-12">
                     <label for="email" class="form-label">
                         Email <span class="text-body-secondary">(Obligatorio)</span>
@@ -557,6 +519,55 @@
                 </div> 
             </div>
 
+            
+            <hr class="my-4">
+
+            <div class="my-3">
+                <div class="form-check">
+                    <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
+                    <label class="form-check-label" for="credit">Credit card</label>
+                </div>
+                
+                <div class="form-check">
+                    <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required="">
+                    <label class="form-check-label" for="debit">Debit card</label>
+                </div>
+                
+                <div class="form-check">
+                    <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required=""> 
+                    <label class="form-check-label" for="paypal">PayPal</label> 
+                </div> 
+            
+            </div>
+            
+            <div class="row gy-3">
+                <div class="col-md-6">
+                    <label for="cc-name" class="form-label">Name on card</label>
+                    <input type="text" class="form-control" id="cc-name" placeholder="" required=""> 
+                    <small class="text-body-secondary">Full name as displayed on card</small> 
+                    <div class="invalid-feedback">Name on card is required
+                    </div> 
+                </div> 
+
+                <div class="col-md-6">
+                    <label for="cc-number" class="form-label">Credit card number</label> 
+                    <input type="text" class="form-control" id="cc-number" placeholder="" required=""> 
+                    <div class="invalid-feedback">Credit card number is required</div> 
+                </div> 
+                
+                <div class="col-md-3"> 
+                    <label for="cc-expiration" class="form-label">Expiration</label> 
+                    <input type="text" class="form-control" id="cc-expiration" placeholder="" required=""> 
+                    <div class="invalid-feedback">Expiration date required</div> 
+                </div> 
+                
+                <div class="col-md-3"> 
+                    <label for="cc-cvv" class="form-label">CVV</label> 
+                    <input type="text" class="form-control" id="cc-cvv" placeholder="" required=""> 
+                    <div class="invalid-feedback">Security code required</div> 
+                </div> 
+            </div>
+
             <hr class="my-4">
 
             <!--radio buton-->
@@ -606,5 +617,6 @@
 
     </div>
 
-    
 </div>
+
+

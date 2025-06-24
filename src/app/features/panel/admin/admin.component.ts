@@ -23,6 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
+import { GraficaComponent } from "../../../../components/grafica/grafica/grafica.component";
 
 
 @Component({
@@ -44,7 +45,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-  ],
+    GraficaComponent
+],
   providers: [ SolicitudService ] // <--- AÑADE ESTA LÍNEA
 
 })

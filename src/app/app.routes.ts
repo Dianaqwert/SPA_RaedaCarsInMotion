@@ -1,3 +1,4 @@
+
 import { Routes } from '@angular/router';
 import { InicioComponent } from '../components/inicio/inicio.component';
 import { EquipoComponent } from '../components/equipo/equipo/equipo.component';
@@ -6,6 +7,7 @@ import { FinanciamientoComponent } from '../components/financiamiento/financiami
 import { CatalogoComponent } from '../components/catalogo/catalogo/catalogo.component';
 import { DetalleAutoComponent } from '../components/detalle-auto/detalle-auto.component';
 import { adminGuard } from './features/auth/guards/admin.guard';
+import { DetalleOfertaComponent } from '../components/qr-detalles/detalle-oferta/detalle-oferta.component'; 
 
 export const routes: Routes = [
   {
@@ -46,6 +48,11 @@ export const routes: Routes = [
     component: DetalleAutoComponent
   },
   {
+  path: 'detalle-oferta/:id',
+  loadComponent: () => import('../components/qr-detalles/detalle-oferta/detalle-oferta.component').then(m => m.DetalleOfertaComponent)
+  }
+  ,
+  {
     path: '',
     redirectTo: 'inicio',
     pathMatch: 'full'
@@ -60,3 +67,4 @@ export const routes: Routes = [
     redirectTo: 'inicio'
   }
 ];
+
