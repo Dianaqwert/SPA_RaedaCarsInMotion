@@ -13,9 +13,12 @@ export default [
     path: 'unlock-account',
     loadComponent: () => import('./components/unlock-account/unlock-account.component'),
   },
+<<<<<<< HEAD
   { 
     path: 'recuperar-contrasena', 
     loadComponent: () => import('./components/recuperar-contrasena/recuperar-contrasena.component')
     
   },
+=======
+>>>>>>> master
 ] as Routes;

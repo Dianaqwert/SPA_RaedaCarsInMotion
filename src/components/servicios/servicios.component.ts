@@ -3,19 +3,18 @@ import { Component, inject, input } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl, ValidationErrors, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthStateService } from '../../app/features/auth/core/data-user/auth-state.service';
 import { Router } from '@angular/router';
-import { AsyncPipe } from '@angular/common'; 
+import { AsyncPipe } from '@angular/common'; // Si usaras el async pipe para otras cosas, mantenlo
 import { toast } from 'ngx-sonner';
-import Swal from 'sweetalert2'; 
+import Swal from 'sweetalert2'; // <--- ¡Importa SweetAlert2 aquí!
 import { SolicitudService } from '../../app/features/panel/data-solicitud/solicitudes.service';
-import { v4 as uuidv4 } from 'uuid';
-import { GraficaComponent } from "../grafica/grafica/grafica.component"; 
+import { v4 as uuidv4 } from 'uuid'; // <--- ¡Importa la función para generar UUIDs!
+import { QrOfertaComponent } from '../qr-generator/qr-oferta/qr-oferta.component';
 // Import PaypalService for payment integration
 import { PaypalService } from '../../services/paypal.service';
 
-
 @Component({
   selector: 'app-servicios',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [QrOfertaComponent, FormsModule,ReactiveFormsModule,CommonModule],
   providers: [SolicitudService],
   templateUrl: './servicios.component.html',
   styleUrl: './servicios.component.css'
@@ -192,7 +191,6 @@ export class ServiciosComponent {
     ])
 
   });
-
 
 
   public direccionValidator(): ValidatorFn {

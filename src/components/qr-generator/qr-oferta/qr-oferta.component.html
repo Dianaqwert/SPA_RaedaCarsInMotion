@@ -1,0 +1,9 @@
+<div class="qr-contenedor">
+  <h2>Escanea tu QR para Descubrir tu Oferta</h2>
+  <h3>Lleva tu ID a la sucursal para reclamar tu oferta</h3>
+
+  <qrcode [qrdata]="qrUrl" [width]="200" errorCorrectionLevel="M"></qrcode>
+
+  <p><strong>ID:</strong> {{ servicioId }}</p>
+  <p><strong>URL:</strong> <a [href]="qrUrl" target="_blank">{{ qrUrl }}</a></p>
+</div>

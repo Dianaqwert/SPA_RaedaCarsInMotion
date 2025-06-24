@@ -9,12 +9,19 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword
 } from '@angular/fire/auth';
+<<<<<<< HEAD
 import { Firestore, collection, doc, getDoc, setDoc, query, where, getDocs, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profilemodel';
 import { firstValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+=======
+import { Firestore, collection, doc, getDoc, setDoc, query, where, getDocs } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { UserProfile } from '../models/user-profilemodel';
+>>>>>>> master
 
 export interface Userr {
   email: string;
@@ -34,7 +41,10 @@ export class AuthStateService {
   public userEmail = signal<string | null>(null);
   public isLoggedIn = computed(() => this.currentUserAuth() !== null);
   public isAuthResolved = signal<boolean>(false);
+<<<<<<< HEAD
   private http = inject(HttpClient); // Inyectar HttpClient
+=======
+>>>>>>> master
 
   constructor() {
     firebaseUserObservable(this.auth).pipe(
@@ -80,6 +90,7 @@ export class AuthStateService {
     });
   }
 
+<<<<<<< HEAD
   // --- NUEVO MÉTODO PARA CAMBIAR CONTRASEÑA ---
   /**
    * Llama al backend para cambiar la contraseña y desbloquear la cuenta.
@@ -93,6 +104,8 @@ export class AuthStateService {
     return firstValueFrom(this.http.post(apiUrl, { email, newPassword }));
   }
 
+=======
+>>>>>>> master
   // Método para guardar el perfil del usuario en Firestore (utilizado por el registro)
   // IMPORTANTE: Este método DEBE ser llamado desde el componente de registro
   // y SÓLO debe asignarse isAdmin: false por defecto.
@@ -110,6 +123,7 @@ export class AuthStateService {
     await setDoc(doc(usersCollection, user.uid), userProfile);
   }
 
+<<<<<<< HEAD
     // --- NUEVO MÉTODO: blockUser ---
   /**
    * Actualiza el perfil de un usuario en Firestore para marcarlo como bloqueado.
@@ -144,6 +158,8 @@ export class AuthStateService {
   }
 
 
+=======
+>>>>>>> master
   async signInWithGoogle(): Promise<User | null> {
     const provider = new GoogleAuthProvider();
     try {
