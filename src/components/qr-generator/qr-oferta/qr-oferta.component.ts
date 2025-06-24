@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-qr-oferta',
   standalone: true,
-  imports: [CommonModule, QRCodeComponent, HttpClientModule],
+  imports: [CommonModule,QRCodeComponent, HttpClientModule],
   templateUrl: './qr-oferta.component.html',
   styleUrls: ['./qr-oferta.component.css']
 })
