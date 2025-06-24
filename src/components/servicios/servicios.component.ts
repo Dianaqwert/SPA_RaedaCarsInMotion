@@ -375,7 +375,7 @@ export class ServiciosComponent {
       }
     }
     
-    if(this.form.valid) {
+     if(this.form.valid) {
       this.formValidated = true;
 
       // --- START: PayPal payment flow integration ---
@@ -425,6 +425,8 @@ export class ServiciosComponent {
       this.form.markAllAsTouched();
       this.formValidated = false;
     }
+  
+
   }
 
 
