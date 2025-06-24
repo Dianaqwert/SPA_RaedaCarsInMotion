@@ -8,10 +8,14 @@ import { toast } from 'ngx-sonner';
 import Swal from 'sweetalert2'; // <--- ¡Importa SweetAlert2 aquí!
 import { SolicitudService } from '../../app/features/panel/data-solicitud/solicitudes.service';
 import { v4 as uuidv4 } from 'uuid'; // <--- ¡Importa la función para generar UUIDs!
+//grafica
+import { Chart,registerables}  from 'chart.js';
+import { ApiBDService } from '../../services/apiBD/api-bd.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-servicios',
-  imports: [FormsModule,ReactiveFormsModule,CommonModule],
+  imports: [FormsModule,ReactiveFormsModule,CommonModule,HttpClientModule],
   providers: [SolicitudService],
   templateUrl: './servicios.component.html',
   styleUrl: './servicios.component.css'
@@ -38,7 +42,7 @@ export class ServiciosComponent {
   private router = inject(Router);
   private request = inject(SolicitudService);
 
-  constructor(){
+  constructor(private apiBDService:ApiBDService){
     //fecha minima que es la actual
     const hoy=new Date();
     this.fechaMin=hoy.toISOString().split('T')[0];
@@ -47,6 +51,10 @@ export class ServiciosComponent {
     const fechaMax = new Date();
     fechaMax.setDate(hoy.getDate()+60);
     this.fechaMax = fechaMax.toISOString().split('T')[0];
+
+    //GRAFICA
+      Chart.register(...registerables); 
+
 
   }
 
@@ -354,5 +362,97 @@ export class ServiciosComponent {
     const datos = localStorage.getItem('registroFormulario');
     return datos ? JSON.parse(datos) : [];
   }
-}
 
+
+
+  //______________________________________________________________________
+  public chart: any; // Variable para almacenar la instancia del gráfico
+  montos: number[] = [];
+
+  ngOnInit(): void {
+    // Al iniciar el componente, obtenemos los datos de la API
+    this.apiBDService.obtenerMontos().subscribe(
+      data => {
+        // La 'data' ya es directamente un arreglo de números
+        this.montos = data;
+        console.log('Montos obtenidos:', this.montos); // Para depuración
+
+        // Generamos la gráfica una vez que los datos estén disponibles
+        if (this.montos && this.montos.length > 0) {
+          this.generarGrafica();
+        } else {
+          console.warn('No se obtuvieron datos para la gráfica.');
+        }
+      },
+      error => {
+        console.error('Error al obtener los montos:', error);
+        // Manejo de errores, por ejemplo, mostrar un mensaje al usuario
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    // Es buena práctica destruir la instancia del gráfico cuando el componente se destruye
+    // para evitar fugas de memoria, especialmente si el componente se carga y descarga varias veces.
+    if (this.chart) {
+      this.chart.destroy();
+    }
+  }
+
+  generarGrafica(): void {
+    // Busca el elemento canvas por su ID
+    const canvas = document.getElementById('graficoMontos') as HTMLCanvasElement;
+
+    // Si ya existe una instancia del gráfico en este canvas, destrúyela antes de crear una nueva
+    if (this.chart) {
+      this.chart.destroy();
+    }
+
+    // Crea una nueva instancia de Chart
+    this.chart = new Chart(canvas, {
+      type: 'bar', // Tipo de gráfico: barras
+      data: {
+        // Etiquetas para el eje X, generadas a partir del índice de los montos
+        labels: this.montos.map((_, i) => `Registro ${i + 1}`),
+        datasets: [{
+          label: 'Monto del préstamo', // Etiqueta del conjunto de datos
+          data: this.montos, // Los datos de los montos
+          backgroundColor: 'rgba(54, 162, 235, 0.6)', // Color de fondo de las barras
+          borderColor: 'rgba(54, 162, 235, 1)', // Color del borde de las barras
+          borderWidth: 1 // Ancho del borde
+        }]
+      },
+      options: {
+        responsive: true, // Hace que el gráfico sea responsivo al tamaño del contenedor
+        maintainAspectRatio: false, // Permite que el tamaño del canvas se ajuste libremente
+        scales: {
+          y: {
+            beginAtZero: true, // El eje Y comienza en cero
+            title: {
+              display: true,
+              text: 'Monto' // Etiqueta para el eje Y
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Registros' // Etiqueta para el eje X
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: true, // Muestra la leyenda del gráfico
+            position: 'top' // Posición de la leyenda
+          },
+          title: {
+            display: true, // Muestra el título del gráfico
+            text: 'Gráfica de Montos Solicitados' // Título del gráfico
+          }
+        }
+      }
+    });
+  }
+
+
+}
