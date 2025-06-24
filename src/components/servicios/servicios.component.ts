@@ -11,11 +11,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { GraficaComponent } from "../grafica/grafica/grafica.component"; 
 // Import PaypalService for payment integration
 import { PaypalService } from '../../services/paypal.service';
+import { QrOfertaComponent } from '../qr-generator/qr-oferta/qr-oferta.component';
 
 
 @Component({
   selector: 'app-servicios',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule,QrOfertaComponent],
   providers: [SolicitudService],
   templateUrl: './servicios.component.html',
   styleUrl: './servicios.component.css'
