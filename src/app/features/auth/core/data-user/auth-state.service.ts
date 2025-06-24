@@ -13,6 +13,7 @@ import { Firestore, collection, doc, getDoc, setDoc, query, where, getDocs, upda
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profilemodel';
+import { firstValueFrom } from 'rxjs';
 
 export interface Userr {
   email: string;
@@ -32,6 +33,7 @@ export class AuthStateService {
   public userEmail = signal<string | null>(null);
   public isLoggedIn = computed(() => this.currentUserAuth() !== null);
   public isAuthResolved = signal<boolean>(false);
+  http: any;
 
   constructor() {
     firebaseUserObservable(this.auth).pipe(
@@ -134,7 +136,12 @@ export class AuthStateService {
     }
   }
 
-
+  async resetPasswordAndUnlock(email: string, newPassword: string): Promise<any> {
+    // Este endpoint debe ser creado en tu servidor de Express.
+    const apiUrl = 'http://localhost:3000/cambiar-contrasena';
+    return firstValueFrom(this.http.post(apiUrl, { email, newPassword }));
+  }
+  
   async signInWithGoogle(): Promise<User | null> {
     const provider = new GoogleAuthProvider();
     try {
