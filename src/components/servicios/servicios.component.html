@@ -97,6 +97,12 @@
 <div class="row g-5">
 
     <div class="col-md-5 col-lg-4 order-md-last"> 
+        <!--QR-->
+        <div>
+            <app-qr-oferta></app-qr-oferta> 
+        </div>
+
+        <hr>
         <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-success">Tu solicitud de servicio</span> 
         </h4> 
@@ -151,6 +157,7 @@
             </li>
         </ul>
 
+      
 
     </div>
     
@@ -249,51 +256,6 @@
                     }
                 </div>
 
-                <!--User-->
-                <!-- <div class="col-12">
-                    <label for="username" class="form-label">Nombre de usuario</label>
-                    <div class="input-group has-validation">
-                        <span class="input-group-text"></span>
-                        <input type="text" class="form-control" id="username" placeholder="Nombre de usuario no debe de tener caracteres como */?|+- , unicamente números y giones bajos y medios" formControlName="username">
-                        @if(form.get('username')?.invalid && form.get('username')?.touched){
-                            @if(form.get('username')?.hasError('required')){
-                                <div class="invalid-feedback">
-                                    Introduzca su nombre de usuario.
-                                </div>
-                            }
-
-                            <div  class="invalid-feedback"
-                                [ngClass]="{
-                                    'd-block': form.get('username')?.hasError('minlength') && form.get('username')?.touched,
-                                    'd-none': !(form.get('username')?.hasError('minlength') && form.get('username')?.touched)
-                                }">
-                                La dirección debe tener al menos 5 caracteres.
-                            </div>
-
-                            <div class="invalid-feedback"
-                                [ngClass]="{
-                                    'd-block': form.get('username')?.hasError('maxlength') && form.get('username')?.touched,
-                                    'd-none': !(form.get('username')?.hasError('maxlength') && form.get('username')?.touched)
-                                }">
-                                La dirección no debe tener más de 30 caracteres.
-                            </div>
-
-                            @if(form.get('username')?.hasError('caracteresInvalidos')){
-                                <div class="invalid-feedback d-block">
-                                    La dirección contiene caracteres inválidos: 
-                                    {{ form.get('username')?.getError('caracteresInvalidos') }}
-                                </div>
-                            }
-                        } @else if(form.get('username')?.valid && form.get('username')?.touched){
-                            <div class="valid-feedback">
-                                Dirección válida
-                            </div>
-                        }
-
-                    </div>
-                </div>
-                <!-jñnl--->
-                <!--mail-->
                 <div class="col-12">
                     <label for="email" class="form-label">
                         Email <span class="text-body-secondary">(Obligatorio)</span>
@@ -599,5 +561,4 @@
 
 </div>
 
-<!--QR-->
-<app-qr-oferta></app-qr-oferta> 
+
