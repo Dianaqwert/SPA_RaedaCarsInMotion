@@ -54,6 +54,11 @@ export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy 
 
   statusOptions: string[] = ['Pendiente', 'Aprobado', 'Rechazado'];
   urgenciaOptions: string[] = ['Baja', 'Media', 'Alta']; // O las opciones que necesites
+  noDataFound = false; //para verificar si no hay datos en ambos
+  //individual
+  noDataFoundServicios = false; // Para verificar si no hay datos en la tabla de servicios
+  noDataFoundCreditos = false; // Para verificar si no hay datos en la tabla de créditos
+  private loadedDataSources = 0; // Contador para saber cuántas fuentes de datos han terminado de cargar
 
   displayedColumnsServicios: string[] =  [
     'fechaDeRegistro',
@@ -84,8 +89,6 @@ export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy 
   
   @ViewChild('paginatorCreditos', { static: false }) paginatorCreditos!: MatPaginator;
   @ViewChild('sortCreditos', { static: false }) sortCreditos!: MatSort;
-
-  isLoading = true;
   private subscriptions: Subscription = new Subscription();
 
   editingElementId: string | null = null;
@@ -133,21 +136,59 @@ export default class AdminComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   cargarDatos(): void {
-    this.isLoading = true;
-    
-    const serviciosSub = this.solicitudService.getSolicitudesServicio().subscribe(data => {
-      this.dataSourceServicios.data = data;
-      this.isLoading = false;
+    this.noDataFound = false; // Resetear todas las banderas al iniciar la carga
+    this.noDataFoundServicios = false;
+    this.noDataFoundCreditos = false;
+    this.loadedDataSources = 0; // Resetear el contador
+
+    // Definir checkCompletion ANTES de usarla
+    const checkCompletion = () => {
+      this.loadedDataSources++;
+      // Una vez que ambas fuentes de datos (servicios y créditos) hayan terminado de cargar
+      if (this.loadedDataSources === 2) {// Ocultar el spinner de carga
+
+        // Evaluar las banderas de noDataFound después de que AMBAS suscripciones hayan terminado
+        this.noDataFoundServicios = this.dataSourceServicios.data.length === 0;
+        this.noDataFoundCreditos = this.dataSourceCreditos.data.length === 0;
+
+        // Si ambas tablas están vacías, establecer noDataFound a true
+        if (this.noDataFoundServicios && this.noDataFoundCreditos) {
+          this.noDataFound = true;
+        }
+      }
+    };
+
+    const serviciosSub = this.solicitudService.getSolicitudesServicio().subscribe({
+      next: data => {
+        this.dataSourceServicios.data = data;
+        // No se establece noDataFoundServicios aquí, se hace en checkCompletion
+        checkCompletion(); // Marcar que servicios ha terminado
+      },
+      error: err => {
+        console.error('Error cargando solicitudes de servicio:', err);
+        // Si hay un error, se considera que "no hay datos" para esta fuente
+        this.dataSourceServicios.data = []; // Asegura que esté vacío en caso de error
+        checkCompletion(); // Marcar que servicios ha terminado, incluso con error
+      }
     });
 
-    const creditosSub = this.solicitudService.getSolicitudesCredito().subscribe(data => {
-      this.dataSourceCreditos.data = data;
+    const creditosSub = this.solicitudService.getSolicitudesCredito().subscribe({
+      next: data => {
+        this.dataSourceCreditos.data = data;
+        // No se establece noDataFoundCreditos aquí, se hace en checkCompletion
+        checkCompletion(); // Marcar que créditos ha terminado
+      },
+      error: err => {
+        console.error('Error cargando solicitudes de crédito:', err);
+        // Si hay un error, se considera que "no hay datos" para esta fuente
+        this.dataSourceCreditos.data = []; // Asegura que esté vacío en caso de error
+        checkCompletion(); // Marcar que créditos ha terminado, incluso con error
+      }
     });
 
     this.subscriptions.add(serviciosSub);
     this.subscriptions.add(creditosSub);
   }
-
   // Métodos para aplicar filtros si los necesitas
   aplicarFiltroServicios(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

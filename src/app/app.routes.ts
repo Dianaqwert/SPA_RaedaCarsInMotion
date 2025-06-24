@@ -20,10 +20,6 @@ export const routes: Routes = [
     loadComponent: () => import('./features/panel/admin/admin.component'),
   },
   {
-    path: 'solicitudes',
-    loadComponent: () => import('./features/panel/solicitudes/solicitudes.component'),
-  },
-  {
     path: 'inicio',
     component: InicioComponent
   },

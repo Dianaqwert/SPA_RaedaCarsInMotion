@@ -5,5 +5,10 @@
   <qrcode [qrdata]="qrUrl" [width]="200" errorCorrectionLevel="M"></qrcode>
 
   <p><strong>ID:</strong> {{ servicioId }}</p>
-  <p><strong>URL:</strong> <a [href]="qrUrl" target="_blank">{{ qrUrl }}</a></p>
+
+  <a [href]="qrUrl" target="_blank" class="btn btn-warning" style="color: white;">
+    Ir al enlace
+  </a>
+
+  <!--p><strong>URL:</strong> <a [href]="qrUrl" target="_blank">{{ qrUrl }}</a></p-->
 </div>

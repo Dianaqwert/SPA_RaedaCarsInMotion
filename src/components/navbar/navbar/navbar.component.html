@@ -29,8 +29,6 @@
           <!-- Lógica condicional para Admin vs. Solicitudes -->
           @if(profile.isAdmin) {
             <a class="btn btn-orange" [routerLink]="['/admin/panel']">Panel Admin</a>
-          } @else {
-            <a class="btn btn-orange" [routerLink]="['/solicitudes']">Solicitudes</a>
           }
 
           <a class="btn btn-orange" (click)="cerrarSesion()">Cerrar Sesión</a>
