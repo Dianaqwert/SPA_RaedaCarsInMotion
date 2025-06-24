@@ -6,8 +6,8 @@ export default [
       path: 'admin/panel',
       loadComponent: () => import('./admin/admin.component'),
     },
-    {
+    /*{
       path: 'solicitudes',
-      loadComponent: () => import('./solicitudes/solicitudes.component'),
-    },
+      loadComponent: () => import('./solicitudes/solicitudes.component').then(m => m.SolicitudesComponent),
+    },*/
   ] as Routes;
