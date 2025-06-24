@@ -18,12 +18,12 @@ export class GraficaComponent {
   montos: number[] = [];
   public chart: any; // Variable para almacenar la instancia del gráfico
   public calculatedStats: CalculatedStatistics | null = null; // Para mostrar las estadísticas en la UI
+  mensajeDataNA : boolean = false; // Bandera para mostrar mensaje de datos no disponibles
+  mensajeError:string =''; // Mensaje de error para mostrar en la UI
   // La propiedad 'loading: boolean' y su control se ELIMINAN de aquí.
   // El interceptor y ngx-ui-loader se encargan automáticamente.
-
   constructor(
     private apiBDService: ApiBDService,
-    // Ya NO necesitas inyectar NgxSpinnerService aquí
   ) {
     // Registra todos los componentes de Chart.js al inicializar el componente
     Chart.register(...registerables);
@@ -46,15 +46,21 @@ export class GraficaComponent {
           this.generarGrafica('histogram'); // Genera el histograma por defecto al cargar
         } else {
           console.warn('No se obtuvieron datos para la gráfica.');
+          this.mensajeDataNA=true;
         }
-        // this.spinner.hide() se ELIMINA de aquí.
       },
       error => {
-        console.error('Error al obtener los montos:', error);
-        this.calculatedStats = { mode: [], mean: 0, median: 0 }; // Asegura valores por defecto en caso de error
-        // this.spinner.hide() se ELIMINA de aquí.
-        // Mensaje de error simple o gestionado por un servicio de notificación
-        console.error('No hay datos o hubo un error en el sistema para obtener los montos.');
+        this.mensajeDataNA=true;
+        if(error.status === 0) {
+          console.error('Error 502: El recurso solicitado no fue encontrado.', error);
+          this.mensajeError='Error 502: No se pudo conectar con el servidor. 😥 Verifica que el backend esté encendido.';
+        }else if(error.status===404){
+          console.error('Error al obtener los montos:', error);
+          this.mensajeError = 'Error 404: El recurso solicitado no fue encontrado.';
+          this.calculatedStats = { mode: [], mean: 0, median: 0 }; // Asegura valores por defecto en caso de error
+          // Mensaje de error simple o gestionado por un servicio de notificación
+          console.error('No hay datos o hubo un error en el sistema para obtener los montos.');
+        }
       }
     );
   }

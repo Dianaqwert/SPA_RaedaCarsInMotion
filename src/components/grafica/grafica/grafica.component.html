@@ -60,9 +60,19 @@
 
     <!-- Columna 2: Gráfica -->
     <div class="col-12 col-md-6">
-      <div class="card p-3 rounded shadow-sm bg-white" style="height: 500px;">
-        <canvas id="graficoMontos"></canvas>
-      </div>
+       @if(mensajeDataNA){
+        <div class="card p-3 rounded shadow-sm bg-white" style="height: 500px;">
+          <div class="d-flex justify-content-center mt-4">
+            <div class="alert alert-danger text-center w-75" role="alert">
+              <p class="fs-5 fw-bold mb-0">{{ mensajeError }}</p>
+            </div>
+          </div>
+        </div>
+       }@else {
+        <div class="card p-3 rounded shadow-sm bg-white" style="height: 500px;">
+          <canvas id="graficoMontos"></canvas>
+        </div>
+      }
     </div>
   </div>
 </div>
