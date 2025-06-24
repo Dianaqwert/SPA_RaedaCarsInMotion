@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PaypalService {
-  private backendUrl = 'http://localhost:3000/paypal'; // Adjust to your backend URL and route
+  private backendUrl = 'https://backendapi-raeda.onrender.com/paypal'; // Adjust to your backend URL and route
 
   constructor(private http: HttpClient) {}
 

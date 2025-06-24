@@ -45,7 +45,7 @@ export default class RecuperarContrasenaComponent {
     const { username } = this.recoveryForm.value;
 
     // El endpoint que creamos en el servidor de Express
-    const apiUrl = 'http://localhost:3000/send-recovery-email';
+    const apiUrl = 'https://backendapi-raeda.onrender.com/send-recovery-email';
 
     this.http.post<{ message: string }>(apiUrl, { username })
       .pipe(
