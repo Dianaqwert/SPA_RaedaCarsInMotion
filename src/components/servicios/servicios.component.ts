@@ -13,6 +13,9 @@ import { Chart,registerables}  from 'chart.js';
 import { ApiBDService } from '../../services/apiBD/api-bd.service';
 import { HttpClientModule } from '@angular/common/http';
 
+// Import PaypalService for payment integration
+import { PaypalService } from '../../services/paypal.service';
+
 @Component({
   selector: 'app-servicios',
   imports: [FormsModule,ReactiveFormsModule,CommonModule,HttpClientModule],
@@ -21,6 +24,87 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './servicios.component.css'
 })
 export class ServiciosComponent {
+  // Add a flag to track if PayPal buttons are rendered
+  paypalButtonsRendered = false;
+
+  // Method to render PayPal buttons dynamically
+  renderPaypalButtons(): void {
+    if (this.paypalButtonsRendered) {
+      return; // Prevent multiple renders
+    }
+    this.paypalButtonsRendered = true;
+
+    // @ts-ignore
+    if (window.paypal) {
+      // Delay rendering to ensure container is in DOM
+      setTimeout(() => {
+        // Clear any existing buttons
+        const container = document.getElementById('paypal-button-container');
+        if (container) {
+          container.innerHTML = '';
+        }
+
+        // Render PayPal buttons
+        // @ts-ignore
+        window.paypal.Buttons({
+        createOrder: (data: any, actions: any) => {
+          // Use the PaypalService to create order via backend
+          return this.paypalService.crearOrden({
+            intent: 'CAPTURE',
+            purchase_units: [{
+              amount: {
+                currency_code: 'MXN', // Use MXN or your currency
+                value: '100.00' // TODO: Replace with actual amount
+              }
+            }]
+          }).then((order: any) => order.id);
+        },
+        onApprove: (data: any, actions: any) => {
+          // Use the PaypalService to capture order via backend
+          return this.paypalService.capturarOrden(data.orderID).then((details: any) => {
+            Swal.fire('Success', 'Payment completed successfully!', 'success');
+          }).catch((error: any) => {
+            Swal.fire('Error', 'Error capturing payment.', 'error');
+          });
+        },
+          onError: (err: any) => {
+            Swal.fire('Error', 'PayPal payment error: ' + err, 'error');
+          }
+        }).render('#paypal-button-container');
+      }, 0);
+    } else {
+      console.error('PayPal SDK not loaded.');
+    }
+  }
+
+  // Watch for payment method changes to render or remove PayPal buttons
+  onPaymentMethodChange(): void {
+    if (this.form.value.paymentMethod === 'paypal') {
+      this.renderPaypalButtons();
+    } else {
+      this.paypalButtonsRendered = false;
+      const container = document.getElementById('paypal-button-container');
+      if (container) {
+        container.innerHTML = '';
+      }
+    }
+  }
+
+  // Method to handle payment method selection from buttons
+  selectPaymentMethod(method: string): void {
+    this.form.patchValue({ paymentMethod: method });
+    this.onPaymentMethodChange();
+  }
+
+  // Add ngOnInit lifecycle hook to subscribe to paymentMethod changes
+  ngOnInit(): void {
+    this.form.get('paymentMethod')?.valueChanges.subscribe(() => {
+      this.onPaymentMethodChange();
+    });
+
+    // Initial call to set the correct UI state
+    this.onPaymentMethodChange();
+  }
 
   //lista despegable
   servicios=['Mantenimiento preventivo',
@@ -43,6 +127,10 @@ export class ServiciosComponent {
   private request = inject(SolicitudService);
 
   constructor(private apiBDService:ApiBDService){
+
+  // Inject PaypalService for payment integration
+  private paypalService = inject(PaypalService);
+
     //fecha minima que es la actual
     const hoy=new Date();
     this.fechaMin=hoy.toISOString().split('T')[0];
@@ -73,8 +161,6 @@ export class ServiciosComponent {
       this.apellidosValidator()
     ]),
 
-
-
     email: new FormControl('', [Validators.required, Validators.email]),
 
     direccion: new FormControl('', [
@@ -83,7 +169,6 @@ export class ServiciosComponent {
       Validators.minLength(10),
       this.direccionValidator() // <- validación personalizada aplicada correctamente
     ]),
-
 
     cp: new FormControl('', [
       Validators.required,
@@ -106,6 +191,8 @@ export class ServiciosComponent {
       this.opcionNoValida()
     ]),
 
+    paymentMethod: new FormControl('credit', [Validators.required]),
+
     terminos:new FormControl(false,[Validators.requiredTrue]),
     urgencia:new FormControl('',[
       Validators.required,
@@ -113,6 +200,7 @@ export class ServiciosComponent {
     ])
 
   });
+
 
 
   public direccionValidator(): ValidatorFn {
@@ -296,6 +384,50 @@ export class ServiciosComponent {
     
     if(this.form.valid) {
       this.formValidated = true;
+
+      // --- START: PayPal payment flow integration ---
+      if(this.form.value.paymentMethod === 'paypal') {
+        // Implement PayPal order creation and capture flow here
+        console.log('PayPal payment selected - implementing order creation and capture');
+
+        // Import PaypalService and inject it
+        // Note: Add PaypalService to constructor or inject it
+        // For this example, we will inject it here
+        // Inject PaypalService
+        const paypalService = inject(PaypalService) as any;
+
+        // Prepare order data for PayPal API
+        const orderData = {
+          intent: 'CAPTURE',
+          purchase_units: [{
+            amount: {
+              currency_code: 'MXN',
+              value: '100.00' // TODO: Replace with actual amount from form or calculation
+            }
+          }]
+        };
+
+        try {
+          // Create order using the correct method name from PaypalService
+          const order = await paypalService.crearOrden(orderData);
+          console.log('Order created:', order);
+
+          // Capture order payment using the correct method name from PaypalService
+          const capture = await paypalService.capturarOrden(order.id);
+          console.log('Order captured:', capture);
+
+          Swal.fire('Success', 'Payment completed successfully!', 'success');
+        } catch (error) {
+          console.error('PayPal payment error:', error);
+          Swal.fire('Error', 'There was an error processing the payment.', 'error');
+        }
+
+      } else {
+        // For credit or debit card payment methods, proceed with existing form submission logic
+        console.log('Non-PayPal payment method selected:', this.form.value.paymentMethod);
+      }
+      // --- END: PayPal payment flow integration ---
+
     } else {
       this.form.markAllAsTouched();
       this.formValidated = false;
