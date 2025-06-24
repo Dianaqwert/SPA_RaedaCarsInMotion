@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profilemodel';
 import { firstValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 export interface Userr {
   email: string;
@@ -27,13 +28,14 @@ export class AuthStateService {
   private auth = inject(Auth);
   private firestore = inject(Firestore);
   private router = inject(Router);
+  private http = inject(HttpClient); 
 
   public currentUserAuth = signal<User | null>(null);
   public currentUserProfile = signal<UserProfile | null>(null);
   public userEmail = signal<string | null>(null);
   public isLoggedIn = computed(() => this.currentUserAuth() !== null);
   public isAuthResolved = signal<boolean>(false);
-  http: any;
+  //http: any;
 
   constructor() {
     firebaseUserObservable(this.auth).pipe(

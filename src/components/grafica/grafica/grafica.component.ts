@@ -47,6 +47,8 @@ export class GraficaComponent {
         } else {
           console.warn('No se obtuvieron datos para la gráfica.');
           this.mensajeDataNA=true;
+          this.mensajeError = 'Por el momento no hay datos que mostrar , no hay registros de montos solicitados.';
+
         }
       },
       error => {

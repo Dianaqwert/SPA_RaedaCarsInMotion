@@ -16,8 +16,7 @@ import { finalize } from 'rxjs';
     RouterLink
   ],
   templateUrl: './recuperar-contrasena.component.html',
-  // Opcional: puedes añadir un archivo CSS si lo necesitas
-  // styleUrls: ['./recuperar-contrasena.component.css']
+
 })
 export default class RecuperarContrasenaComponent {
 

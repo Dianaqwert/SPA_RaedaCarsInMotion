@@ -8,6 +8,8 @@ import { finalize } from 'rxjs';
 import { AuthStateService } from '../../core/data-user/auth-state.service';
 import { PasswordValidationResult, PasswordValidatorService } from '../../core/password-validator.service';
 
+//-------
+import { HttpClientModule } from '@angular/common/http';
 // Validador personalizado para asegurar que las contraseñas coincidan
 export const passwordsMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const password = control.get('newPassword');
@@ -18,7 +20,7 @@ export const passwordsMatchValidator: ValidatorFn = (control: AbstractControl): 
 @Component({
   selector: 'app-cambiar-contrasena',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink,HttpClientModule ],
   templateUrl: './cambiar-contrasena.component.html',
 })
 export default class CambiarContrasenaComponent implements OnInit {
@@ -76,9 +78,7 @@ export default class CambiarContrasenaComponent implements OnInit {
       return;
     }
 
-    
-
-
+  
     try {
       // Esta llamada es correcta. Llama al servicio que se comunicará con el backend.
       const response = await this.authService.resetPasswordAndUnlock(this.userEmail, newPassword);
@@ -86,6 +86,7 @@ export default class CambiarContrasenaComponent implements OnInit {
       this.router.navigateByUrl('/sesion/sign-in');
     } catch (error: any) {
       // ... manejo de errores ...
+      console.log('Error con backend:', error);
     } finally {
       this.isLoading = false;
     }
