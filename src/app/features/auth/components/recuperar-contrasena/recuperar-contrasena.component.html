@@ -1,0 +1,60 @@
+<section class="bg-light vh-100 d-flex align-items-center justify-content-center">
+    <div class="container py-4">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+  
+          <div class="card shadow rounded-3">
+            <div class="card-body p-4 p-md-5">
+              <div class="d-flex flex-column align-items-center mb-4 text-center">
+                <h1 class="h3 fw-bold text-dark mb-2">Recuperar Contraseña</h1>
+                <p class="text-secondary fw-light">
+                  Ingresa tu nombre de usuario y te enviaremos un enlace a tu correo para restablecer tu contraseña.
+                </p>
+              </div>
+  
+              <!-- Formulario de recuperación -->
+              <form [formGroup]="recoveryForm" (ngSubmit)="submit()" novalidate>
+                
+                <!-- Campo de Nombre de Usuario -->
+                <div class="mb-3">
+                  <label for="username" class="form-label text-dark fw-medium">Nombre de usuario</label>
+                  <input
+                    type="text"
+                    id="username"
+                    class="form-control rounded-3"
+                    placeholder="Tu nombre de usuario"
+                    formControlName="username"
+                  />
+                  @if(isUsernameRequired) {
+                  <small class="text-danger mt-1 d-block">Este campo es requerido</small>
+                  }
+                </div>
+  
+                <!-- Botón de Submit -->
+                <button
+                  type="submit"
+                  class="btn btn-primary w-100 fw-medium rounded-3 py-2 mt-4"
+                  [disabled]="isLoading"
+                >
+                  @if (isLoading) {
+                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                    <span role="status"> Enviando...</span>
+                  } @else {
+                    <span>Enviar enlace de recuperación</span>
+                  }
+                </button>
+                
+                <!-- Enlace para volver a Iniciar Sesión -->
+                <div class="text-center mt-4">
+                  <a routerLink="/sesion/sign-in" class="text-dark fw-medium text-decoration-underline">
+                    Volver a Iniciar Sesión
+                  </a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
