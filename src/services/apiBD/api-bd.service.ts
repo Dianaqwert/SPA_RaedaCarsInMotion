@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiBDService {
   //api
-  private apiUrl='http://localhost:3000/api/montos';
+  private apiUrl='https://backendapi-raeda.onrender.com/api/montos';
   constructor(private http: HttpClient) {}
 
   // Este método ahora espera directamente un arreglo de números

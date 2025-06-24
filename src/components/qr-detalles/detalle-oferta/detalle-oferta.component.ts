@@ -22,7 +22,7 @@ export class DetalleOfertaComponent implements OnInit {
   }
 
   obtenerInformacion() {
-    const url = `http://localhost:3000/api/informacionQR/${this.servicioId}`;
+    const url = `https://backendapi-raeda.onrender.com/api/informacionQR/${this.servicioId}`;
     this.http.get(url).subscribe({
       next: (data: any) => this.infoQR = data,
       error: err => console.error('Error al obtener datos del servicio', err)
