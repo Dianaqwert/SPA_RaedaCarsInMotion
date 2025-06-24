@@ -1,0 +1,196 @@
+/* You can add global styles to this file, and also import other style files */
+:root{
+    --fuente-principal:"DM Sans", sans-serif;
+}
+
+* {
+  font-family: var(--fuente-principal);
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.high-contrast {
+  background-color: #050003 !important;
+  color: #ffffff !important;
+}
+
+.high-contrast a,
+.high-contrast .btn,
+.high-contrast .nav-link {
+  color: #ffffff !important;
+  background-color: #050003 !important;
+  border-color: #050003 !important;
+}
+
+.high-contrast .btn-orange {
+  background-color: #FDC08E !important;
+  color: #050003 !important;
+  border: 1px solid #050003 !important;
+}
+
+.high-contrast .btn-orange:hover{
+  background-color: #d08a50 !important;
+  color: #050003 !important;
+  border: 1px solid #050003 !important;
+}
+
+.high-contrast .navbar-nav .nav-link:hover {
+  color: #FDC08E !important;
+}
+
+
+.high-contrast .navbar,
+.high-contrast .footer,
+.high-contrast .intro,
+.high-contrast .text,
+.high-contrast .carousel-caption {
+  background-color: #050003 !important;
+  color: #ffffff !important;
+}
+
+.high-contrast .footer main .lead .btn {
+  background-color: #FEF4D9 !important;
+  color: #050003 !important; /* opcional, por contraste */
+}
+
+.high-contrast .footer main .lead .btn:hover{
+  background-color: #b1a37b !important;
+  color: #050003 !important; /* opcional, por contraste */
+}
+
+.high-contrast h3,
+.high-contrast h4,
+.high-contrast p,
+.high-contrast li,
+.high-contrast span,
+.high-contrast strong {
+  color: #ffffff !important;
+}
+
+
+.high-contrast .carousel-caption h5,
+.high-contrast .carousel-caption p,
+.high-contrast .carousel-caption p strong {
+  color: #FFFFFF !important;
+  background-color: #050003 !important;
+}
+
+.high-contrast .carousel-caption p strong{
+    color:#FEF4D9 !important;
+}
+
+
+.high-contrast .contenedor .header {
+    background-color:  #FFFFFF !important;
+    color:#050003 !important;
+}
+
+.high-contrast .contenedor p{
+    color:#050003 !important;
+}
+
+.high-contrast .contenedor p strong,
+.high-contrast .contenedor .mb-5 a{
+    color:#FEF4D9 !important;
+    background-color:#050003;
+}
+
+.high-contrast .contenedor h1{
+    color:#050003 !important;
+    background-color:  #ffff !important;
+}
+
+.high-contrast .contenedor .mb-5 a{
+    color:#050003 !important;
+    background-color: #FEF4D9 !important;
+}
+
+.high-contrast .contenedor .mb-5 a:hover{
+    color:#050003 !important;
+    background-color: #b1a37b !important;
+}
+
+
+.high-contrast .contenedor .sidebar{ 
+    background: linear-gradient(to bottom, #050003,#FDC08E) !important;
+}
+
+
+.high-contrast .contenedor .sidebar .card{
+    background-color: #050003;
+    color: #FFFFFF;
+}
+
+.high-contrast .navbar .container-fluid a img,
+.high-contrast main .py-5 .row .col-lg-6 img,
+.high-contrast .container-fluid .row .col .d-flex img{
+    filter: brightness(1.5) contrast(0.6);
+}
+
+.high-contrast .contenedor .sidebar .card .card-body .btn{
+    background-color:#FEF4D9 !important;
+    color:#050003 !important;
+}
+
+.high-contrast .contenedor .sidebar .card .card-body .btn:hover{
+    background-color:#b1a37b !important;
+    color:#050003 !important;
+}
+
+.high-contrast .contenedor .widget-1,
+.high-contrast .contenedor .widget-2,
+.high-contrast .contenedor .widget-3,
+.high-contrast .contenedor .widget-4,
+.high-contrast .contenedor .widget-1 h3,
+.high-contrast .contenedor .widget-2 h3,
+.high-contrast .contenedor .widget-3 h3,
+.high-contrast .contenedor .widget-4 h3{
+    background-color:#C9F9FF !important;
+    color:#676767 !important;
+}
+
+
+.high-contrast .contenido h2,
+.high-contrast .contenido p,
+.high-contrast .contenido p strong{
+    color: #FFFFFF !important;
+}
+
+.high-contrast .my-sidebar{
+  color: #050003;
+  border-color: #E6E6E6;
+  border-style:solid;
+  border-right: #E6E6E6;
+}
+
+.high-contrast .my-sidebar .offcanvas-body ul li hr{
+  color: #050003;
+}
+
+.high-contrast .my-sidebar .offcanvas-header h5,
+.high-contrast .my-sidebar .offcanvas-body ul li p{
+  color: #E6E6E6;
+  background-color: #050003;
+}
+
+.high-contrast .my-sidebar .offcanvas-body .btn {
+  background-color: #96CDFD !important;
+  color: #131313 !important;
+}
+
+.high-contrast .my-sidebar .offcanvas-body .btn:hover{
+  background-color: #084070 !important;
+  color: #96CDFD !important;
+}
+
+.high-contrast .my-sidebar .salir .btn{ 
+  background-color: #145C3C !important;
+  color: #ffffff !important;
+}
+
+.high-contrast .my-sidebar .salir .btn:hover{ 
+  background-color: #022f1b !important;
+  color: #ffffff !important;
+}
+
