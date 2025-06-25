@@ -8,6 +8,7 @@ import { CatalogoComponent } from '../components/catalogo/catalogo/catalogo.comp
 import { DetalleAutoComponent } from '../components/detalle-auto/detalle-auto.component';
 import { adminGuard } from './features/auth/guards/admin.guard';
 import { DetalleOfertaComponent } from '../components/qr-detalles/detalle-oferta/detalle-oferta.component'; 
+import { QrOfertaComponent } from '../components/qr-generator/qr-oferta/qr-oferta.component';
 
 export const routes: Routes = [
   {
@@ -62,6 +63,8 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'inicio'
-  }
+  },
+  {path: 'qr-oferta', component:QrOfertaComponent}, // Redirige a la primera oferta por defecto
+  {path: 'detalle-oferta/:id',component: DetalleOfertaComponent} // Ruta para el componente de QR de oferta
 ];
 
