@@ -11,7 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./qr-oferta.component.css']
 })
 export class QrOfertaComponent {
-  servicioId: string = '';
+servicioId: string = '';
   qrUrl: string = '';
 
   constructor() {
@@ -21,6 +21,9 @@ export class QrOfertaComponent {
   generarQrAleatorio() {
     const numero = Math.floor(Math.random() * 6) + 1; // genera del 1 al 6
     this.servicioId = `servicio${numero}`;
-    this.qrUrl = `http://prueba-1-9c56c/${this.servicioId}`;
+
+    // *** ¡Aquí está el cambio clave! ***
+    this.qrUrl = `/detalle.oderta/${this.servicioId}`;
   }
+
 }
