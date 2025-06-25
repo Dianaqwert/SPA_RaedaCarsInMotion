@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "dist/spa-raeda-cars-in-motion/browser",
     "ignore": [
       "firebase.json",
       "**/.*",

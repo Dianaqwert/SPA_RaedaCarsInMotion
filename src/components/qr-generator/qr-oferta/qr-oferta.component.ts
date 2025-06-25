@@ -21,6 +21,6 @@ export class QrOfertaComponent {
   generarQrAleatorio() {
     const numero = Math.floor(Math.random() * 6) + 1; // genera del 1 al 6
     this.servicioId = `servicio${numero}`;
-    this.qrUrl = `http://localhost:4200/detalle-oferta/${this.servicioId}`;
+    this.qrUrl = `http://prueba-1-9c56c/${this.servicioId}`;
   }
 }
