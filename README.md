@@ -1,59 +1,63 @@
-# SPARaedaCarsInMotion
+# RAEDA Cars In Motion 🏎️
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
+[cite_start]**RAEDA Cars** is a full-stack web application designed for a car dealership to manage client requests, services, and financing[cite: 18, 19]. [cite_start]It features a robust administration dashboard and advanced accessibility tools[cite: 36, 324].
 
-## Development server
+[cite_start]🔗 **Live Website:** [https://spa-28285.web.app/](https://spa-28285.web.app/) [cite: 143]  
+[cite_start]💻 **Frontend Repository (Angular):** [Dianaqwert/SPA_RaedaCarsInMotion](https://github.com/Dianaqwert/SPA_RaedaCarsInMotion) [cite: 145]  
+[cite_start]⚙️ **Backend Repository (Node.js):** [Dianaqwert/BackEndApi_nodeJS](https://github.com/Dianaqwert/BackEndApi_nodeJS) [cite: 146]
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## 👥 The Team
+[cite_start]This project was a collaborative effort by students of Computer Systems Engineering at the Autonomous University of Aguascalientes
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+##  Features
+* [cite_start]**User Authentication**: Supports standard registration and login, including Google authentication[cite: 32, 656, 659].
+* [cite_start]**Service Management**: Users can request maintenance or repairs through reactive forms with real-time validation[cite: 33, 517, 585].
+* [cite_start]**Financing Calculator**: Tools to calculate monthly payments and interest for different loan terms[cite: 850, 855].
+* [cite_start]**Web Accessibility**: A dedicated menu providing Text-to-Speech (TTS), font size adjustments, and high-contrast modes[cite: 324, 325, 344, 347, 399].
+* [cite_start]**QR Rewards**: Generates specific QR codes for users to claim dealership offers[cite: 116, 517, 564].
+* [cite_start]**PWA Support**: Optimized as a Progressive Web App for mobile use[cite: 140, 260].
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🛠️ Technology Stack
+* [cite_start]**Frontend**: Angular (styled with CSS and Bootstrap)[cite: 21].
+* [cite_start]**Backend**: Node.js[cite: 138, 146].
+* [cite_start]**Database**: Firebase Cloud Firestore (NoSQL)[cite: 22, 38].
+* [cite_start]**Hosting**: Firebase Hosting for the frontend and Render for the API[cite: 136, 139].
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 📸 Screenshots
 
-```bash
-ng generate --help
-```
+### Home Page & Catalog
+![Home Screen](https://via.placeholder.com/800x400?text=RAEDA+Cars+Home)
+[cite_start]*Overview of the dealership services and vehicle carousel[cite: 416, 471].*
 
-## Building
+### Accessibility Menu
+![Accessibility Menu](https://via.placeholder.com/800x400?text=Accessibility+Options)
+[cite_start]*Integrated tools for users with visual impairments[cite: 324].*
 
-To build the project run:
+### Service Request & QR Code
+![Service Form](https://via.placeholder.com/800x400?text=Service+Form+and+QR)
+[cite_start]*Functional form for maintenance scheduling with QR reward generation[cite: 539, 564].*
 
+---
+
+##  Installation and Development
+This project was generated using **Angular CLI version 19.2.11**.
+
+### Local Setup
+1. Clone the repository.
+2. Install dependencies: `npm install`.
+3. Run the development server: `ng serve`.
+4. Open your browser at `http://localhost:4200/`.
+
+### Deployment
+To create a production build:
 ```bash
 ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Academic Context
+Developed as the Final Project for the Web Technologies course under the supervision of Dr. Georgina Salazar Partida
